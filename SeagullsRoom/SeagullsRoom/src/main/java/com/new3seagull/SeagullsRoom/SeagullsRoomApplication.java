@@ -1,4 +1,4 @@
-package com.new3seagull.SeagulsRoom;
+package com.new3seagull.SeagullsRoom;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

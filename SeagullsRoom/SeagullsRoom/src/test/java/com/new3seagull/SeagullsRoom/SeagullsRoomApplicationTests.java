@@ -1,10 +1,10 @@
-package com.new3seagull.SeagulsRoom;
+package com.new3seagull.SeagullsRoom;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class SeagulsRoomApplicationTests {
+class SeagullsRoomApplicationTests {
 
 	@Test
 	void contextLoads() {
