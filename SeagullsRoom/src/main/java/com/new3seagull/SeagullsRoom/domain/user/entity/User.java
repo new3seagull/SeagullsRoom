@@ -1,4 +1,4 @@
-package com.new3seagull.SeagullsRoom.domain.user;
+package com.new3seagull.SeagullsRoom.domain.user.entity;
 
 
 import jakarta.persistence.Entity;
