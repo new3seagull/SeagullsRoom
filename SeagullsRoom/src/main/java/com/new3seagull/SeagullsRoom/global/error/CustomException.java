@@ -1,6 +1,8 @@
 package com.new3seagull.SeagullsRoom.global.error;
 
+import com.new3seagull.SeagullsRoom.global.util.ApiUtils;
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
 
 @Getter
 public class CustomException extends RuntimeException{
