@@ -118,12 +118,13 @@ com
         |   | ㄴ service
         | ...
         ㄴ global
-            ㄴ auth
-            ㄴ common
-            ㄴ config
-            ㄴ error
-            ㄴ infra
-            ㄴ util
+        |    ㄴ auth
+        |    ㄴ common
+        |    ㄴ config
+        |    ㄴ error
+        |    ㄴ infra
+        |    ㄴ util
+        ㄴ SeagullsRoomApllication
 ```
 ### 최상위 레벨에서는 domain과 global로 패키징한다.
 ### domain 패키지에서는 도메인을 기준으로 하위 패키지를 구성한다.
