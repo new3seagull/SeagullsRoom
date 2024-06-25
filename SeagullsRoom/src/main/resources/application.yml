@@ -12,7 +12,12 @@ spring:
     hibernate:
       ddl-auto: none
 
+
+  jwt:
+    secret: vmfhaltmskdlstkfkdgodyroqkfwkdbalroqkfwkdbalaaaaaaaaaaaaaaaabbbbb
+
 ---
+
 spring:
   config:
     activate:
@@ -49,3 +54,5 @@ spring:
   sql:
     init:
       mode: never # init sql 실행 x
+
+
