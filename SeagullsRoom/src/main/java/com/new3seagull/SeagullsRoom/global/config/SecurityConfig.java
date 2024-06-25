@@ -64,9 +64,12 @@ public class SecurityConfig {
         http
                 .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
         // addFilterAt == 추가할 필터, 대체될 필터
-        http
-                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
+        // 로그인 경로 지정
+        LoginFilter loginFilter = new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil);
+        loginFilter.setFilterProcessesUrl("/api/v1/login");
 
+        http
+                .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class);
         //세션 설정 세션을 Stateless 상태로 만들어 줘야한다.
         http
                 .sessionManagement((session) -> session
