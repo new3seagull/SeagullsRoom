@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@ResponseBody
 @RequiredArgsConstructor
 public class JoinController {
 
@@ -18,6 +17,6 @@ public class JoinController {
     @PostMapping("/api/v1/users")
     public String joinProcess(@RequestBody JoinDto joinDto) {
         joinService.joinProcess(joinDto);
-        return "ok";
+        return "redirect:/login.html";
     }
 }

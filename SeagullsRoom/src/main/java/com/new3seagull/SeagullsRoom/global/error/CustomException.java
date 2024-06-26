@@ -20,8 +20,8 @@ public class CustomException extends RuntimeException{
         this.message = message;
     }
 
-    public ApiUtils.ApiResult<?> body(){
-        return ApiUtils.error(message, exceptionCode.getHttpStatus());
+    public ApiUtils.ApiFail body(){
+        return ApiUtils.fail(message, exceptionCode.getHttpStatus());
     }
 
     public HttpStatus status(){

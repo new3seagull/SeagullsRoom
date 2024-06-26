@@ -30,7 +30,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> unknownServerError(Exception e){
         String message = extractDesiredMessage(e.getMessage());
 
-        ApiUtils.ApiResult<?> apiResult = ApiUtils.error(message, HttpStatus.INTERNAL_SERVER_ERROR);
+        ApiUtils.ApiFail apiResult = ApiUtils.fail(message, HttpStatus.INTERNAL_SERVER_ERROR);
         return new ResponseEntity<>(apiResult, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
@@ -38,7 +38,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleValidationExceptions(MethodArgumentNotValidException ex) {
         BindingResult result = ex.getBindingResult();
         String errorMessage = Objects.requireNonNull(result.getFieldError()).getDefaultMessage();
-        return ResponseEntity.badRequest().body(ApiUtils.error(errorMessage, HttpStatus.BAD_REQUEST));
+        return ResponseEntity.badRequest().body(ApiUtils.fail(errorMessage, HttpStatus.BAD_REQUEST));
     }
 
     // 메시지에서 원하는 부분만 노출 되도록 처리
