@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up</title>
+</head>
+<body>
+<h2>Sign Up</h2>
+<form id="signupForm" method="post" action="http://localhost:8080/signup">
+  <label for="name">Name:</label>
+  <input type="text" id="name" name="name" required><br><br>
+
+  <label for="email">Email:</label>
+  <input type="email" id="email" name="email" required><br><br>
+
+  <label for="password">Password:</label>
+  <input type="password" id="password" name="password" required><br><br>
+
+  <button type="submit">Sign Up</button>
+</form>
+
+<script>
+  document.getElementById('signupForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    fetch('http://localhost:8080/api/v1/users', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ name: name, email: email, password: password })
+    }).then(response => {
+      if (response.ok) {
+        console.log('Sign up successful');
+        location.href='login.html'
+        // Handle successful sign up
+      } else {
+        console.log('Sign up failed');
+        // Handle sign up failure
+      }
+    }).catch(error => {
+      console.error('Error:', error);
+    });
+  });
+</script>
+</body>
+</html>
