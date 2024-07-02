@@ -8,6 +8,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface StudyRepository extends JpaRepository<Study, Long> {
-
-    public List<Study> findAllByUserId(User userId);
+    List<Study> findAllByUser(User user);
 }
