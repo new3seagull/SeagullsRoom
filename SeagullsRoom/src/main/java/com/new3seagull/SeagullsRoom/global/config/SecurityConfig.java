@@ -57,7 +57,7 @@ public class SecurityConfig {
         //경로별 인가 작업
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/", "/join", "/api/v1/users", "/auth.html", "/login.html", "/signup.html", "/main.html").permitAll()
+                        .requestMatchers("/", "/join", "/api/v1/users", "/auth.html", "/login.html", "/signup.html", "/main.html", "/h2-console/**", "/favicon.ico").permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .anyRequest().authenticated());
         //JWTFilter 등록
@@ -74,6 +74,8 @@ public class SecurityConfig {
         http
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        // 'X-Frame-Options' 헤더 비활성화 h2 디비에 연결하기 위해
+        http.headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()));
 
         return http.build();
     }
