@@ -39,6 +39,4 @@ public class Friend {
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
-
-    // 생성자, 기타 메서드 등
 }
