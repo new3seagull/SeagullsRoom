@@ -20,7 +20,6 @@ public class StudyService {
     @Transactional
     public List<Study> getStudytimesByUser(User user) {
         return studyRepository.findAllByUser(user);
-        // todo - id와 studyTime만?
     }
 
     public Study getStudyById(User user, Long id) {
