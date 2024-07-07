@@ -27,7 +27,7 @@ public class GlobalExceptionHandler {
 //    }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<?> unknownServerError(Exception e){
+    public ResponseEntity<?> unknownServerError(Exception e) {
         String message = extractDesiredMessage(e.getMessage());
 
         ApiUtils.ApiFail apiResult = ApiUtils.fail(message, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -38,7 +38,16 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleValidationExceptions(MethodArgumentNotValidException ex) {
         BindingResult result = ex.getBindingResult();
         String errorMessage = Objects.requireNonNull(result.getFieldError()).getDefaultMessage();
-        return ResponseEntity.badRequest().body(ApiUtils.fail(errorMessage, HttpStatus.BAD_REQUEST));
+        return ResponseEntity.badRequest()
+            .body(ApiUtils.fail(errorMessage, HttpStatus.BAD_REQUEST));
+    }
+
+    @ExceptionHandler(isNotUsersStudyException.class)
+    public ResponseEntity<ExceptionResponse> handleNoSuchWishException(
+        isNotUsersStudyException e) {
+        ExceptionResponse error = new ExceptionResponse(HttpStatus.CONFLICT.value(),
+            e.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 
     // 메시지에서 원하는 부분만 노출 되도록 처리
