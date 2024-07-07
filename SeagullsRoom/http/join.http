@@ -1,0 +1,11 @@
+### 회원 가입
+POST /api/v1/users HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "박준형",
+  "email": "sam1616@naver.com",
+  "password": "password123"
+}
