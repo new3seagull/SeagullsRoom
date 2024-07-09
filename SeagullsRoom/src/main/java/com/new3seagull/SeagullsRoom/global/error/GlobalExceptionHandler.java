@@ -42,9 +42,9 @@ public class GlobalExceptionHandler {
             .body(ApiUtils.fail(errorMessage, HttpStatus.BAD_REQUEST));
     }
 
-    @ExceptionHandler(isNotUsersStudyException.class)
-    public ResponseEntity<ExceptionResponse> handleNoSuchWishException(
-        isNotUsersStudyException e) {
+    @ExceptionHandler(IsNotUsersStudyException.class)
+    public ResponseEntity<ExceptionResponse> handleIsNotUsersStudyException(
+        IsNotUsersStudyException e) {
         ExceptionResponse error = new ExceptionResponse(HttpStatus.CONFLICT.value(),
             e.getMessage());
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);

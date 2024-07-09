@@ -35,7 +35,16 @@ public class Study {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    public Study() {
+    }
+
+    public Study(User user, LocalTime studyTime) {
+        this.user = user;
+        this.studyTime = studyTime;
+    }
+
     public StudyResponseDto toDto() {
-        return new StudyResponseDto(this.id, this.user.getEmail(), this.studyTime, this.createdAt, this.updatedAt);
+        return new StudyResponseDto(this.id, this.user.getEmail(), this.studyTime, this.createdAt,
+            this.updatedAt);
     }
 }

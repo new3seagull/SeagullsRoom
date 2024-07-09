@@ -10,7 +10,6 @@ import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,11 +32,7 @@ public class StudyController {
     @GetMapping
     public ResponseEntity<List<StudyResponseDto>> getStudytimesByUserId(Principal principal) {
         User user = userService.getUserByEmail(principal.getName());
-        List<Study> studies = studyService.getStudytimesByUser(user);
-        List<StudyResponseDto> responseDtos = studies.stream()
-            .map(Study::toDto)
-            .collect(Collectors.toList());
-        return ResponseEntity.ok(responseDtos);
+        return ResponseEntity.ok(studyService.getStudytimesByUser(user));
     }
 
     @GetMapping("/{id}")
