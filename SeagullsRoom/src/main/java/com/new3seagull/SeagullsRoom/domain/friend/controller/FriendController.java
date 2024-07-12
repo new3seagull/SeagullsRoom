@@ -1,5 +1,6 @@
 package com.new3seagull.SeagullsRoom.domain.friend.controller;
 
+import com.new3seagull.SeagullsRoom.domain.friend.dto.AddFriendRequestDto;
 import com.new3seagull.SeagullsRoom.domain.friend.dto.FriendResponseDto;
 import com.new3seagull.SeagullsRoom.domain.friend.service.FriendService;
 import java.security.Principal;
@@ -19,5 +20,11 @@ public class FriendController {
     @ResponseStatus(HttpStatus.OK)
     public List<FriendResponseDto> getFriends(Principal principal) {
         return friendService.getFriendsByUserEmail(principal.getName());
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public FriendResponseDto addFriend(Principal principal, @RequestBody AddFriendRequestDto requestDto) {
+        return friendService.addFriend(principal.getName(), requestDto.getFriendEmail());
     }
 }
