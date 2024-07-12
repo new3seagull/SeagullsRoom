@@ -1,6 +1,6 @@
 package com.new3seagull.SeagullsRoom.domain.friend.controller;
 
-import com.new3seagull.SeagullsRoom.domain.friend.dto.AddFriendRequestDto;
+import com.new3seagull.SeagullsRoom.domain.friend.dto.FriendRequestDto;
 import com.new3seagull.SeagullsRoom.domain.friend.dto.FriendResponseDto;
 import com.new3seagull.SeagullsRoom.domain.friend.service.FriendService;
 import java.security.Principal;
@@ -24,7 +24,13 @@ public class FriendController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public FriendResponseDto addFriend(Principal principal, @RequestBody AddFriendRequestDto requestDto) {
+    public FriendResponseDto addFriend(Principal principal, @RequestBody FriendRequestDto requestDto) {
         return friendService.addFriend(principal.getName(), requestDto.getFriendEmail());
+    }
+
+    @DeleteMapping
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void removeFriend(Principal principal, @RequestBody FriendRequestDto requestDto) {
+        friendService.removeFriend(principal.getName(), requestDto.getFriendEmail());
     }
 }

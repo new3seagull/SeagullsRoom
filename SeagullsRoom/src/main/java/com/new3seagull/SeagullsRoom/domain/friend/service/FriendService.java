@@ -50,6 +50,20 @@ public class FriendService {
 
         Friend savedFriend = friendRepository.save(newFriend);
 
-        return new FriendResponseDto(savedFriend.getFriend().getId(), savedFriend.getFriend().getName());
+        return savedFriend.toResponseDto();
+    }
+
+    @Transactional
+    public void removeFriend(String userEmail, String friendEmail) {
+        User user = userRepository.findByEmail(userEmail)
+            .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+
+        User friend = userRepository.findByEmail(friendEmail)
+            .orElseThrow(() -> new RuntimeException("해당 사용자를 찾을 수 없습니다."));
+
+        Friend friendRelation = friendRepository.findByUserAndFriend(user, friend)
+            .orElseThrow(() -> new RuntimeException("등록된 친구를 찾을 수 없습니다."));
+
+        friendRepository.delete(friendRelation);
     }
 }

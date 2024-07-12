@@ -45,6 +45,6 @@ public class Friend {
     }
 
     public FriendResponseDto toResponseDto() {
-        return new FriendResponseDto(this.friend.getId(), this.friend.getName());
+        return new FriendResponseDto(this.friend.getEmail(), this.friend.getName());
     }
 }

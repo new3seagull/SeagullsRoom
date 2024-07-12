@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddFriendRequestDto {
+public class FriendRequestDto {
     private String friendEmail;
 }
