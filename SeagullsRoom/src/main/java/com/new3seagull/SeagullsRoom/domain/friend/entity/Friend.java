@@ -1,5 +1,7 @@
 package com.new3seagull.SeagullsRoom.domain.friend.entity;
 
+import com.new3seagull.SeagullsRoom.domain.friend.dto.FriendResponseDto;
+import com.new3seagull.SeagullsRoom.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,11 +20,13 @@ public class Friend {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "user_id")
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    @Column(name = "friend_id")
-    private Long friendId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "friend_id", nullable = false)
+    private User friend;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -38,5 +42,9 @@ public class Friend {
     @PreUpdate
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
+    }
+
+    public FriendResponseDto toResponseDto() {
+        return new FriendResponseDto(this.friend.getId(), this.friend.getName());
     }
 }
