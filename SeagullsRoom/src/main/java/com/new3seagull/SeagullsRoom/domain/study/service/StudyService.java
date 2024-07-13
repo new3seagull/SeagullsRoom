@@ -5,19 +5,20 @@ import com.new3seagull.SeagullsRoom.domain.study.repository.StudyRepository;
 import com.new3seagull.SeagullsRoom.domain.user.entity.User;
 import com.new3seagull.SeagullsRoom.global.error.isNotUsersStudyException;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
+
 import java.time.LocalTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @AllArgsConstructor
+@Transactional(readOnly = true)
 public class StudyService {
 
     private final StudyRepository studyRepository;
 
-    @Transactional
     public List<Study> getStudytimesByUser(User user) {
         return studyRepository.findAllByUser(user);
     }
@@ -35,9 +36,10 @@ public class StudyService {
 
     @Transactional
     public Study recordStudyTime(User user, LocalTime studyTime) {
-        Study study = new Study();
-        study.setUser(user);
-        study.setStudyTime(studyTime);
-        return studyRepository.save(study);
+
+        return studyRepository.save(Study.builder()
+                .user(user)
+                .studyTime(studyTime)
+                .build());
     }
 }
