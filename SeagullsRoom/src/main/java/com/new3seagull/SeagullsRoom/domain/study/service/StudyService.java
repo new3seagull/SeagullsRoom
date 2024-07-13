@@ -1,14 +1,20 @@
 package com.new3seagull.SeagullsRoom.domain.study.service;
 
+import com.new3seagull.SeagullsRoom.domain.study.dto.StudyResponseDto;
 import com.new3seagull.SeagullsRoom.domain.study.entity.Study;
 import com.new3seagull.SeagullsRoom.domain.study.repository.StudyRepository;
 import com.new3seagull.SeagullsRoom.domain.user.entity.User;
 import com.new3seagull.SeagullsRoom.global.error.isNotUsersStudyException;
 import jakarta.persistence.EntityNotFoundException;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,4 +48,14 @@ public class StudyService {
                 .studyTime(studyTime)
                 .build());
     }
+
+
+    public List<StudyResponseDto> getTop10StudyTimes() {
+        Pageable pageable = PageRequest.of(0, 10);
+        List<Study> top10Studies = studyRepository.findAllByStudyDateOrderByStudyTimeDesc(pageable, LocalDate.now()).getContent();
+        return top10Studies.stream()
+                .map(StudyResponseDto::toDto)
+                .collect(Collectors.toList());
+    }
+
 }
