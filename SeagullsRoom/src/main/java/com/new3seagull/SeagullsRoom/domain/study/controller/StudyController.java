@@ -6,6 +6,7 @@ import com.new3seagull.SeagullsRoom.domain.study.service.StudyService;
 import com.new3seagull.SeagullsRoom.domain.user.entity.User;
 import com.new3seagull.SeagullsRoom.domain.user.service.UserService;
 import java.security.Principal;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +27,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/study")
+@RequestMapping("/api/v1/studies")
 public class StudyController {
 
     private final StudyService studyService;
@@ -63,8 +64,16 @@ public class StudyController {
 
     @GetMapping("/top10")
     public ResponseEntity<?> rankStudyTime() {
-        return ResponseEntity.ok(ApiUtils.success(studyService.getTop10StudyTimes()));
+        return ResponseEntity.ok(ApiUtils.success(studyService.getTop10StudyTimes(LocalDate.now())));
     }
 
+    @GetMapping("/user/date")
+    public ResponseEntity<?> dateStudyTime(Principal principal) {
+        return ResponseEntity.ok(ApiUtils.success(studyService.getStudyTimeByDate(principal, LocalDate.now())));
+    }
+    @GetMapping("/user/month")
+    public ResponseEntity<?> monthStudyTime(Principal principal) {
+        return ResponseEntity.ok(ApiUtils.success(studyService.getStudyTimeByMonth(principal, LocalDate.now())));
+    }
 
 }
