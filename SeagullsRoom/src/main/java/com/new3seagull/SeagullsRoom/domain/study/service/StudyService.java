@@ -1,10 +1,12 @@
 package com.new3seagull.SeagullsRoom.domain.study.service;
 
+import static com.new3seagull.SeagullsRoom.global.error.ExceptionCode.NOT_USERS_STUDY;
+
 import com.new3seagull.SeagullsRoom.domain.study.dto.StudyResponseDto;
 import com.new3seagull.SeagullsRoom.domain.study.entity.Study;
 import com.new3seagull.SeagullsRoom.domain.study.repository.StudyRepository;
 import com.new3seagull.SeagullsRoom.domain.user.entity.User;
-import com.new3seagull.SeagullsRoom.global.error.IsNotUsersStudyException;
+import com.new3seagull.SeagullsRoom.global.error.CustomException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import java.time.LocalTime;
@@ -33,7 +35,7 @@ public class StudyService {
             .orElseThrow(() -> new EntityNotFoundException("Study not found with id: " + id));
 
         if (!study.getUser().equals(user)) {
-            throw new IsNotUsersStudyException("You don't have permission to access this study");
+            throw new CustomException(NOT_USERS_STUDY);
         }
 
         return study;

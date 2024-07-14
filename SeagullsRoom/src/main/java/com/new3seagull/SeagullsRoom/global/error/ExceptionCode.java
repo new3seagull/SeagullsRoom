@@ -14,7 +14,8 @@ public enum ExceptionCode {
 
 
     // 잘못된 접근
-    BAD_APPROACH(HttpStatus.BAD_REQUEST, "잘못된 접근입니다.");
+    BAD_APPROACH(HttpStatus.BAD_REQUEST, "잘못된 접근입니다."),
+    NOT_USERS_STUDY(HttpStatus.FORBIDDEN, "사용자의 공부 기록이 아닙니다.");
 
 
 
