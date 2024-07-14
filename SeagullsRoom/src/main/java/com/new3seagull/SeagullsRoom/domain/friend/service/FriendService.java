@@ -1,5 +1,6 @@
 package com.new3seagull.SeagullsRoom.domain.friend.service;
 
+import com.new3seagull.SeagullsRoom.domain.friend.dto.FriendCountDto;
 import com.new3seagull.SeagullsRoom.domain.friend.dto.FriendResponseDto;
 import com.new3seagull.SeagullsRoom.domain.friend.entity.Friend;
 import com.new3seagull.SeagullsRoom.domain.friend.repository.FriendRepository;
@@ -65,5 +66,16 @@ public class FriendService {
             .orElseThrow(() -> new RuntimeException("등록된 친구를 찾을 수 없습니다."));
 
         friendRepository.delete(friendRelation);
+    }
+
+    @Transactional(readOnly = true)
+    public FriendCountDto getFriendCount(String email) {
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+
+        long followingCount = friendRepository.countByUser(user);
+        long followerCount = friendRepository.countByFriend(user);
+
+        return new FriendCountDto(followingCount, followerCount);
     }
 }
