@@ -67,8 +67,7 @@ public class FriendService {
 
     @Transactional(readOnly = true)
     public FriendCountDto getFriendCount(String email) {
-        User user = userRepository.findByEmail(email)
-            .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+        User user = userService.getUserByEmail(email);
 
         long followingCount = friendRepository.countByUser(user);
         long followerCount = friendRepository.countByFriend(user);

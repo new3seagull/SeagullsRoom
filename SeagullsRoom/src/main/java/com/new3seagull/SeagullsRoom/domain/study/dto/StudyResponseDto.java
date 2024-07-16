@@ -18,7 +18,6 @@ public class StudyResponseDto {
     private Long id;
     private String userEmail;
     private LocalTime studyTime;
-    private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
 
@@ -27,7 +26,6 @@ public class StudyResponseDto {
             .id(study.getId())
             .userEmail(study.getUser().getEmail())
             .studyTime(study.getStudyTime())
-            .createdAt(study.getCreatedAt())
             .updatedAt(study.getUpdatedAt())
             .build();
     }
