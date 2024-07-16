@@ -5,44 +5,44 @@ import com.new3seagull.SeagullsRoom.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class Study {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "studytime")
+    @Column(name = "study_time")
     private LocalTime studyTime;
 
     @CreationTimestamp
-    @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt;
+    @Column(name = "study_date", updatable = false)
+    private LocalDate studyDate;
 
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    public Study() {
-    }
-
     @Builder
-    private Study(User user, LocalTime studyTime) {
+    private Study(User user, Long id, LocalTime studyTime, LocalDate studyDate, LocalDateTime updatedAt) {
         this.user = user;
         this.studyTime = studyTime;
+        this.studyDate = studyDate;
+        this.updatedAt = updatedAt;
     }
-
-
 }

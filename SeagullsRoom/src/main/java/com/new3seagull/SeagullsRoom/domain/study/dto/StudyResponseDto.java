@@ -3,6 +3,11 @@ package com.new3seagull.SeagullsRoom.domain.study.dto;
 import com.new3seagull.SeagullsRoom.domain.study.entity.Study;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import com.new3seagull.SeagullsRoom.domain.study.entity.Study;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
