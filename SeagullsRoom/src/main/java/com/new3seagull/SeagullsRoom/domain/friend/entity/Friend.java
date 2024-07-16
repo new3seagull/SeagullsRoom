@@ -1,18 +1,15 @@
 package com.new3seagull.SeagullsRoom.domain.friend.entity;
 
-import com.new3seagull.SeagullsRoom.domain.friend.dto.FriendResponseDto;
 import com.new3seagull.SeagullsRoom.domain.user.entity.User;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "friends",
     uniqueConstraints = @UniqueConstraint(name = "uk_user_friend", columnNames = {"user_id", "friend_id"}))
 @Getter
-@Setter
 @NoArgsConstructor
 public class Friend {
 
@@ -28,23 +25,9 @@ public class Friend {
     @JoinColumn(name = "friend_id", nullable = false)
     private User friend;
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
-
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
-
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        updatedAt = LocalDateTime.now();
-    }
-
-    public FriendResponseDto toResponseDto() {
-        return new FriendResponseDto(this.friend.getEmail(), this.friend.getName());
+    @Builder
+    private Friend(User user, User friend) {
+        this.user = user;
+        this.friend = friend;
     }
 }

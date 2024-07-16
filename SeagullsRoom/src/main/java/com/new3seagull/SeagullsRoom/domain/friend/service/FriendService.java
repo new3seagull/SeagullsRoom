@@ -6,6 +6,7 @@ import com.new3seagull.SeagullsRoom.domain.friend.entity.Friend;
 import com.new3seagull.SeagullsRoom.domain.friend.repository.FriendRepository;
 import com.new3seagull.SeagullsRoom.domain.user.entity.User;
 import com.new3seagull.SeagullsRoom.domain.user.repository.UserRepository;
+import com.new3seagull.SeagullsRoom.domain.user.service.UserService;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -18,22 +19,21 @@ public class FriendService {
 
     private final FriendRepository friendRepository;
     private final UserRepository userRepository;
+    private final UserService userService;
 
     @Transactional(readOnly = true)
     public List<FriendResponseDto> getFriendsByUserEmail(String email) {
         List<Friend> friends = friendRepository.findAllByUserEmail(email);
         return friends.stream()
-            .map(Friend::toResponseDto)
+            .map(FriendResponseDto::toResponseDto)
             .collect(Collectors.toList());
     }
 
     @Transactional
-    public FriendResponseDto addFriend(String email, String friendEmail) {
-        User user = userRepository.findByEmail(email)
-            .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+    public FriendResponseDto addFriend(String userEmail, String friendEmail) {
+        User user = userService.getUserByEmail(userEmail);
 
-        User friend = userRepository.findByEmail(friendEmail)
-            .orElseThrow(() -> new RuntimeException("해당 사용자를 찾을 수 없습니다."));
+        User friend = userService.getUserByEmail(friendEmail);
 
         // 자기 자신을 친구로 추가하려는 경우
         if (user.getId().equals(friend.getId())) {
@@ -45,22 +45,19 @@ public class FriendService {
             throw new IllegalStateException("이미 등록된 친구입니다.");
         }
 
-        Friend newFriend = new Friend();
-        newFriend.setUser(user);
-        newFriend.setFriend(friend);
+        Friend newFriend = Friend.builder()
+            .user(user)
+            .friend(friend)
+            .build();
 
-        Friend savedFriend = friendRepository.save(newFriend);
-
-        return savedFriend.toResponseDto();
+        return FriendResponseDto.toResponseDto(friendRepository.save(newFriend));
     }
 
     @Transactional
     public void removeFriend(String userEmail, String friendEmail) {
-        User user = userRepository.findByEmail(userEmail)
-            .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+        User user = userService.getUserByEmail(userEmail);
 
-        User friend = userRepository.findByEmail(friendEmail)
-            .orElseThrow(() -> new RuntimeException("해당 사용자를 찾을 수 없습니다."));
+        User friend = userService.getUserByEmail(friendEmail);
 
         Friend friendRelation = friendRepository.findByUserAndFriend(user, friend)
             .orElseThrow(() -> new RuntimeException("등록된 친구를 찾을 수 없습니다."));

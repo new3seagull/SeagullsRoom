@@ -24,13 +24,12 @@ public class StudyService {
     @Transactional
     public List<StudyResponseDto> getStudytimesByUser(User user) {
         List<Study> studies = studyRepository.findAllByUser(user);
-        List<StudyResponseDto> responseDtos = studies.stream()
-            .map(Study::toDto)
+        return studies.stream()
+            .map(StudyResponseDto::toDto)
             .collect(Collectors.toList());
-        return responseDtos;
     }
 
-    public Study getStudyById(User user, Long id) {
+    public StudyResponseDto getStudyById(User user, Long id) {
         Study study = studyRepository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Study not found with id: " + id));
 
@@ -38,12 +37,12 @@ public class StudyService {
             throw new CustomException(NOT_USERS_STUDY);
         }
 
-        return study;
+        return StudyResponseDto.toDto(study);
     }
 
     @Transactional
-    public Study recordStudyTime(User user, LocalTime studyTime) {
-        Study study = new Study(user, studyTime);
-        return studyRepository.save(study);
+    public StudyResponseDto recordStudyTime(User user, LocalTime studyTime) {
+        Study study = Study.builder().user(user).studyTime(studyTime).build();
+        return StudyResponseDto.toDto(studyRepository.save(study));
     }
 }

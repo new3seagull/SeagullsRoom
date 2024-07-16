@@ -31,7 +31,8 @@ public class FriendController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public FriendResponseDto addFriend(Principal principal, @RequestBody FriendRequestDto requestDto) {
+    public FriendResponseDto addFriend(Principal principal,
+        @RequestBody FriendRequestDto requestDto) {
         return friendService.addFriend(principal.getName(), requestDto.getFriendEmail());
     }
 
