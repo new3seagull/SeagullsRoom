@@ -1,21 +1,22 @@
 package com.new3seagull.SeagullsRoom.domain.study.service;
 
+import static com.new3seagull.SeagullsRoom.global.error.ExceptionCode.NOT_USERS_STUDY;
 import com.new3seagull.SeagullsRoom.domain.study.dto.StudyResponseDto;
 import com.new3seagull.SeagullsRoom.domain.study.entity.Study;
 import com.new3seagull.SeagullsRoom.domain.study.repository.StudyRepository;
 import com.new3seagull.SeagullsRoom.domain.user.entity.User;
+import com.new3seagull.SeagullsRoom.global.error.CustomException;
 import com.new3seagull.SeagullsRoom.domain.user.repository.UserRepository;
 import com.new3seagull.SeagullsRoom.global.error.CustomException;
 import com.new3seagull.SeagullsRoom.global.error.isNotUsersStudyException;
 import jakarta.persistence.EntityNotFoundException;
-
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -32,19 +33,23 @@ public class StudyService {
     private final StudyRepository studyRepository;
     private final UserRepository userRepository;
 
-    public List<Study> getStudytimesByUser(User user) {
-        return studyRepository.findAllByUser(user);
+    @Transactional
+    public List<StudyResponseDto> getStudytimesByUser(User user) {
+        List<Study> studies = studyRepository.findAllByUser(user);
+        return studies.stream()
+            .map(StudyResponseDto::toDto)
+            .collect(Collectors.toList());
     }
 
-    public Study getStudyById(User user, Long id) {
+    public StudyResponseDto getStudyById(User user, Long id) {
         Study study = studyRepository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Study not found with id: " + id));
 
         if (!study.getUser().equals(user)) {
-            throw new isNotUsersStudyException("You don't have permission to access this study");
+            throw new CustomException(NOT_USERS_STUDY);
         }
 
-        return study;
+        return StudyResponseDto.toDto(study);
     }
 
     @Transactional
