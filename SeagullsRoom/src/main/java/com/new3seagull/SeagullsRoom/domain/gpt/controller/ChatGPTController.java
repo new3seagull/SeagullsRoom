@@ -1,8 +1,8 @@
 package com.new3seagull.SeagullsRoom.domain.gpt.controller;
 
 
-import com.new3seagull.SeagullsRoom.domain.gpt.ChatGPTRequest;
-import com.new3seagull.SeagullsRoom.domain.gpt.ChatGPTResponse;
+import com.new3seagull.SeagullsRoom.domain.gpt.dto.ChatGPTRequest;
+import com.new3seagull.SeagullsRoom.domain.gpt.dto.ChatGPTResponse;
 import com.new3seagull.SeagullsRoom.global.util.ImageUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/v1/gpt")
