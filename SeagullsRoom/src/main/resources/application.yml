@@ -15,6 +15,11 @@ spring:
 
   jwt:
     secret: vmfhaltmskdlstkfkdgodyroqkfwkdbalroqkfwkdbalaaaaaaaaaaaaaaaabbbbb
+openai:
+  model: gpt-4o
+  api:
+    key: token
+    url: https://api.openai.com/v1/chat/completions
 
 ---
 
