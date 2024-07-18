@@ -1,4 +1,4 @@
-package com.new3seagull.SeagullsRoom.domain.gpt;
+package com.new3seagull.SeagullsRoom.domain.gpt.dto;
 
 import lombok.Getter;
 
