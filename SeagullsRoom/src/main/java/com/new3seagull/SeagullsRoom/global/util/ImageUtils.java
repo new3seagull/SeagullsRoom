@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.Base64;
 
 public class ImageUtils {
-    public static String encodeImageToBase64(MultipartFile imageFile) throws IOException, IOException {
+    public static String encodeImageToBase64(MultipartFile imageFile) throws IOException {
         byte[] fileContent = imageFile.getBytes();
         return Base64.getEncoder().encodeToString(fileContent);
     }
