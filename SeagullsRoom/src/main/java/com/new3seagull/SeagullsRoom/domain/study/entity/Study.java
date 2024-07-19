@@ -1,12 +1,10 @@
 package com.new3seagull.SeagullsRoom.domain.study.entity;
 
-import com.new3seagull.SeagullsRoom.domain.study.dto.StudyResponseDto;
 import com.new3seagull.SeagullsRoom.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
