@@ -1,66 +1,74 @@
 package com.new3seagull.SeagullsRoom.domain.study.controller;
 
+import com.new3seagull.SeagullsRoom.domain.study.dto.StduyAddRequestDto;
 import com.new3seagull.SeagullsRoom.domain.study.dto.StudyResponseDto;
 import com.new3seagull.SeagullsRoom.domain.study.entity.Study;
 import com.new3seagull.SeagullsRoom.domain.study.service.StudyService;
 import com.new3seagull.SeagullsRoom.domain.user.entity.User;
 import com.new3seagull.SeagullsRoom.domain.user.service.UserService;
 import java.security.Principal;
+import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import com.new3seagull.SeagullsRoom.global.util.ApiUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/study")
+@RequestMapping("/api/v1/studies")
 public class StudyController {
 
     private final StudyService studyService;
     private final UserService userService;
 
+    // 유저의 공부 시간 조회
     @GetMapping
-    public ResponseEntity<List<StudyResponseDto>> getStudytimesByUserId(Principal principal) {
+    @ResponseStatus(HttpStatus.OK)
+    public List<StudyResponseDto> getStudytimesByUserId(Principal principal) {
         User user = userService.getUserByEmail(principal.getName());
-        List<Study> studies = studyService.getStudytimesByUser(user);
-        List<StudyResponseDto> responseDtos = studies.stream()
-            .map(Study::toDto)
-            .collect(Collectors.toList());
-        return ResponseEntity.ok(responseDtos);
+        return studyService.getStudytimesByUser(user);
     }
 
+    // 스터디 아이디를 통해 시간 조회
     @GetMapping("/{id}")
-    public ResponseEntity<Study> getStudyById(Principal principal, @PathVariable Long id) {
+    @ResponseStatus(HttpStatus.OK)
+    public StudyResponseDto getStudyById(Principal principal, @PathVariable Long id) {
         User user = userService.getUserByEmail(principal.getName());
-        Study study = studyService.getStudyById(user, id);
-        return ResponseEntity.ok(study);
+        return studyService.getStudyById(user, id);
     }
 
     @PostMapping
-    public ResponseEntity<Map<String, Object>> recordStudyTime(Principal principal,
-        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime studyTime) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public StudyResponseDto recordStudyTime(Principal principal,
+        @RequestBody @DateTimeFormat(iso = ISO.TIME) StduyAddRequestDto request) {
         User user = userService.getUserByEmail(principal.getName());
-        Study recordedStudy = studyService.recordStudyTime(user, studyTime);
-        StudyResponseDto recordedStudyTime = recordedStudy.toDto();
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("success", true);
-        response.put("message", "공부 기록이 성공적으로 추가되었습니다.");
-        response.put("data", recordedStudyTime);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return studyService.recordStudyTime(user, request.getStudyTime());
     }
 
+    @GetMapping("/top10")
+    public ResponseEntity<?> rankStudyTime() {
+        return ResponseEntity.ok(ApiUtils.success(studyService.getTop10StudyTimes(LocalDate.now())));
+    }
 
+    @GetMapping("/user/date")
+    public ResponseEntity<?> dateStudyTime(Principal principal) {
+        return ResponseEntity.ok(ApiUtils.success(studyService.getStudyTimeByDate(principal, LocalDate.now())));
+    }
+    @GetMapping("/user/month")
+    public ResponseEntity<?> monthStudyTime(Principal principal) {
+        return ResponseEntity.ok(ApiUtils.success(studyService.getStudyTimeByMonth(principal, LocalDate.now())));
+    }
 }

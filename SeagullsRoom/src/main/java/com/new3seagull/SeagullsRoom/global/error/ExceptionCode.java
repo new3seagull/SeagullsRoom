@@ -13,8 +13,10 @@ public enum ExceptionCode {
     USER_EMAIL_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 존재하는 이메일입니다."),
 
 
+
     // 잘못된 접근
-    BAD_APPROACH(HttpStatus.BAD_REQUEST, "잘못된 접근입니다.");
+    BAD_APPROACH(HttpStatus.BAD_REQUEST, "잘못된 접근입니다."),
+    NOT_USERS_STUDY(HttpStatus.FORBIDDEN, "사용자의 공부 기록이 아닙니다.");
 
 
 
