@@ -5,6 +5,7 @@ import com.new3seagull.SeagullsRoom.domain.study.dto.StudyResponseDto;
 import com.new3seagull.SeagullsRoom.domain.study.service.StudyService;
 import com.new3seagull.SeagullsRoom.domain.user.entity.User;
 import com.new3seagull.SeagullsRoom.domain.user.service.UserService;
+import jakarta.validation.Valid;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
@@ -45,7 +46,7 @@ public class StudyController {
 
     @PostMapping
     public ResponseEntity<StudyResponseDto> recordStudyTime(Principal principal,
-        @RequestBody @DateTimeFormat(iso = ISO.TIME) StduyAddRequestDto request) {
+        @Valid @RequestBody @DateTimeFormat(iso = ISO.TIME) StduyAddRequestDto request) {
         User user = userService.getUserByEmail(principal.getName());
         return ResponseEntity.status(HttpStatus.CREATED).body(studyService.recordStudyTime(user, request.getStudyTime()));
     }

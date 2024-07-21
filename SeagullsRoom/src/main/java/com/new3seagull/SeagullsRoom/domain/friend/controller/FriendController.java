@@ -4,6 +4,7 @@ import com.new3seagull.SeagullsRoom.domain.friend.dto.FriendCountDto;
 import com.new3seagull.SeagullsRoom.domain.friend.dto.FriendRequestDto;
 import com.new3seagull.SeagullsRoom.domain.friend.dto.FriendResponseDto;
 import com.new3seagull.SeagullsRoom.domain.friend.service.FriendService;
+import jakarta.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +31,7 @@ public class FriendController {
 
     @PostMapping
     public ResponseEntity<FriendResponseDto> addFriend(Principal principal,
-        @RequestBody FriendRequestDto requestDto) {
+        @Valid @RequestBody FriendRequestDto requestDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(friendService.addFriend(principal.getName(), requestDto.getFriendEmail()));
     }
 
