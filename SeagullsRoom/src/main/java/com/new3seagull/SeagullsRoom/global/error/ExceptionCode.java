@@ -16,7 +16,10 @@ public enum ExceptionCode {
 
     // 잘못된 접근
     BAD_APPROACH(HttpStatus.BAD_REQUEST, "잘못된 접근입니다."),
-    NOT_USERS_STUDY(HttpStatus.FORBIDDEN, "사용자의 공부 기록이 아닙니다.");
+    NOT_USERS_STUDY(HttpStatus.FORBIDDEN, "사용자의 공부 기록이 아닙니다."),
+    NOT_USERS_TODO(HttpStatus.FORBIDDEN, "사용자의 TODO 기록이 아닙니다."),
+    DUPLICATE_TODO_TITLE(HttpStatus.CONFLICT, "이미 같은 제목의 Todo가 존재합니다."),
+    NO_TODO(HttpStatus.NOT_FOUND, "해당 TODO가 존재하지 않습니다.");
 
 
 
