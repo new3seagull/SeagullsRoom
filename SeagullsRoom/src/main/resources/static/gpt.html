@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatGPT Image Upload</title>
+</head>
+<body>
+<h1>Upload an Image to ChatGPT</h1>
+<form id="imageForm">
+<!--    <input type="file" id="imageFile" name="imageFile" accept="image/*" required>-->
+    <button type="submit">Upload and Submit</button>
+</form>
+
+<h2>Response:</h2>
+<pre id="responseContent"></pre>
+<video id="screenVideo" autoplay style="display:none;"></video>
+<canvas id="canvas" width="700" height="500"></canvas>
+<script src="js/gpt.js"></script>
+</body>
+</html>
