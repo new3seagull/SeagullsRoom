@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>클릭 가능한 원들</title>
+    <link rel="stylesheet" href="css/calibration.css">
+</head>
+<body>
+<div id="circle-container"></div>
+<button id="restart-button" style="display: none;">다시하기</button>
+<button id="next-button" style="display: none;">이동</button>
+
+<div id="helpModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>안내 메시지</h2>
+        <p>원에 시선을 고정하고 사라질 때까지 클릭하세요!<br>
+            아이트래킹의 성능이 만족스러울 때까지 반복하세요!
+        </p>
+    </div>
+</div>
+
+<script src="js/calibration.js"></script>
+<script src="js/webgazer.js"></script>
+</body>
+</html>
