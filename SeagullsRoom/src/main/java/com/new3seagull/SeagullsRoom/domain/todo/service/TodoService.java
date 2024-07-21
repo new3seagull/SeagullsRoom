@@ -3,6 +3,7 @@ package com.new3seagull.SeagullsRoom.domain.todo.service;
 import static com.new3seagull.SeagullsRoom.global.error.ExceptionCode.DUPLICATE_TODO_TITLE;
 import static com.new3seagull.SeagullsRoom.global.error.ExceptionCode.NOT_USERS_TODO;
 import static com.new3seagull.SeagullsRoom.global.error.ExceptionCode.NO_TODO;
+import static com.new3seagull.SeagullsRoom.global.error.ExceptionCode.USER_NOT_FOUND;
 
 import com.new3seagull.SeagullsRoom.domain.todo.dto.TodoRequestDto;
 import com.new3seagull.SeagullsRoom.domain.todo.dto.TodoResponseDto;
@@ -28,6 +29,11 @@ public class TodoService {
     @Transactional(readOnly = true)
     public List<TodoResponseDto> getTodosByUser(String email) {
         User user = userRepository.findByEmail(email);
+
+        if (user == null) {
+            throw new CustomException(USER_NOT_FOUND);
+        }
+
         return todoRepository.findByUser(user).stream()
             .map(TodoResponseDto::toDto)
             .collect(Collectors.toList());
