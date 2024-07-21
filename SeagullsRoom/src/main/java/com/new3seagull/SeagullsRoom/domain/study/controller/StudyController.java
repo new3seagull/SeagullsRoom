@@ -2,16 +2,12 @@ package com.new3seagull.SeagullsRoom.domain.study.controller;
 
 import com.new3seagull.SeagullsRoom.domain.study.dto.StduyAddRequestDto;
 import com.new3seagull.SeagullsRoom.domain.study.dto.StudyResponseDto;
-import com.new3seagull.SeagullsRoom.domain.study.entity.Study;
 import com.new3seagull.SeagullsRoom.domain.study.service.StudyService;
 import com.new3seagull.SeagullsRoom.domain.user.entity.User;
 import com.new3seagull.SeagullsRoom.domain.user.service.UserService;
 import java.security.Principal;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 import com.new3seagull.SeagullsRoom.global.util.ApiUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
@@ -22,7 +18,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -36,26 +31,23 @@ public class StudyController {
 
     // 유저의 공부 시간 조회
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public List<StudyResponseDto> getStudytimesByUserId(Principal principal) {
+    public ResponseEntity<List<StudyResponseDto>> getStudytimesByUserId(Principal principal) {
         User user = userService.getUserByEmail(principal.getName());
-        return studyService.getStudytimesByUser(user);
+        return ResponseEntity.ok(studyService.getStudytimesByUser(user));
     }
 
     // 스터디 아이디를 통해 시간 조회
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public StudyResponseDto getStudyById(Principal principal, @PathVariable Long id) {
+    public ResponseEntity<StudyResponseDto> getStudyById(Principal principal, @PathVariable Long id) {
         User user = userService.getUserByEmail(principal.getName());
-        return studyService.getStudyById(user, id);
+        return ResponseEntity.ok(studyService.getStudyById(user, id));
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public StudyResponseDto recordStudyTime(Principal principal,
+    public ResponseEntity<StudyResponseDto> recordStudyTime(Principal principal,
         @RequestBody @DateTimeFormat(iso = ISO.TIME) StduyAddRequestDto request) {
         User user = userService.getUserByEmail(principal.getName());
-        return studyService.recordStudyTime(user, request.getStudyTime());
+        return ResponseEntity.status(HttpStatus.CREATED).body(studyService.recordStudyTime(user, request.getStudyTime()));
     }
 
     @GetMapping("/top10")
