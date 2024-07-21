@@ -1,6 +1,6 @@
 package com.new3seagull.SeagullsRoom.domain.todo.service;
 
-import static com.new3seagull.SeagullsRoom.global.error.ExceptionCode.NOT_USERS_STUDY;
+import static com.new3seagull.SeagullsRoom.global.error.ExceptionCode.DUPLICATE_TODO_TITLE;
 import static com.new3seagull.SeagullsRoom.global.error.ExceptionCode.NOT_USERS_TODO;
 import static com.new3seagull.SeagullsRoom.global.error.ExceptionCode.NO_TODO;
 
@@ -36,7 +36,18 @@ public class TodoService {
     @Transactional
     public TodoResponseDto addTodo(String email, TodoRequestDto requestDto) {
         User user = userRepository.findByEmail(email);
-        Todo todo = createTodoFromDto(requestDto, user);
+
+        if (todoRepository.existsByTitleAndUser(requestDto.getTitle(), user)) {
+            throw new CustomException(DUPLICATE_TODO_TITLE);
+        }
+
+        Todo todo = Todo.builder()
+            .title(requestDto.getTitle())
+            .description(requestDto.getDescription())
+            .completed(requestDto.getCompleted())
+            .user(user)
+            .build();
+
         Todo savedTodo = todoRepository.save(todo);
         return TodoResponseDto.toDto(savedTodo);
     }
@@ -67,14 +78,5 @@ public class TodoService {
         }
 
         todoRepository.delete(todo);
-    }
-
-    private Todo createTodoFromDto(TodoRequestDto dto, User user) {
-        return Todo.builder()
-            .title(dto.getTitle())
-            .description(dto.getDescription())
-            .completed(false)
-            .user(user)
-            .build();
     }
 }

@@ -12,6 +12,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.Builder;
@@ -49,15 +51,22 @@ public class Todo {
     private User user;
 
     @Builder
-    private Todo(User user, Long id, String title, String description, boolean completed,
-        LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.user = user;
-        this.id = id;
+    public Todo(String title, String description, boolean completed, User user) {
         this.title = title;
         this.description = description;
         this.completed = completed;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+        this.user = user;
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = this.createdAt;
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
     }
 
     public void update(String title, String description, boolean completed) {
