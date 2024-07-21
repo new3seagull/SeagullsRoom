@@ -18,7 +18,7 @@ spring:
 openai:
   model: gpt-4o
   api:
-    key: sk-proj-SktJ6kuNSDEbUdQNaRA6T3BlbkFJy01JQdc59Lxx1HNWelQ0
+    key: token
     url: https://api.openai.com/v1/chat/completions
 
 ---
