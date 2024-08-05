@@ -49,6 +49,7 @@ function appendMessage(sender, message, imageFile = null, isSent = false) {
         const img = document.createElement('img');
         img.src = URL.createObjectURL(imageFile);
         img.alt = 'Image';
+        imageContainer.classList.add('capture')
         imageContainer.appendChild(img);
 
         chatMessages.appendChild(imageContainer);
@@ -136,7 +137,7 @@ document.getElementById('startButton').addEventListener('click', async function(
                         // document.getElementById('responseContent').textContent = data;
                         console.log(data + " data")
                         controlTimer(data);
-                        appendMessage('GPT4-o', "gpt의 결과: " + data); //gpt의 응답
+                        appendMessage('GPT4-o: ', data); //gpt의 응답
                     })
                     .catch(error => {
                         console.error('Error:', error);

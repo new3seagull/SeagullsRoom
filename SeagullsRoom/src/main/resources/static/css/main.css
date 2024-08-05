@@ -103,12 +103,15 @@ button:active {
     color: #333;
 }
 
-.message img {
-    max-width: 50px; /* 이미지 크기 조절 */
+.capture img {
+    /*max-width: 20px; !* 이미지의 최대 너비를 20px로 설정 *!*/
+    /*max-height: 20px; !* 이미지의 최대 높이를 20px로 설정 *!*/
     border-radius: 5px;
     margin-top: 5px;
     display: block;
     margin-left: auto; /* 이미지가 오른쪽에 붙도록 설정 */
+    width: 50%;
+    height: 50%;
 }
 
 .message-container {
