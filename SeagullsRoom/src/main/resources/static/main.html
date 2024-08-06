@@ -17,9 +17,9 @@
 <!--<a href = "http://localhost:8080/gpt.html">gpt</a>-->
 
 <nav class="main-menu">
-  <div id="todoInput">
-    <input type="text" id="newTodoInput" placeholder="새로운 할 일을 입력하세요">
-    <button onclick="addTodo()">추가</button>
+  <div id="todoHeader">
+    <h3>TODO</h3>
+    <button id="addTodoButton">+</button>
   </div>
   <ul id="todoList">
   </ul>
@@ -34,6 +34,26 @@
   <button id="pauseButton" style="display:none;">일시정지</button>
   <button id="stopButton" style="display:none;">종료</button>
   <button id="calibrationButton">calibration</button>
+</div>
+
+<!-- Todo Modal -->
+<div id="todoModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>새 TODO 추가</h2>
+    <form id="todoForm">
+      <label for="todoTitle">제목:</label>
+      <input type="text" id="todoTitle" required>
+
+      <label for="todoDescription">설명:</label>
+      <textarea id="todoDescription"></textarea>
+
+      <label for="todoCompleted">완료 여부:</label>
+      <input type="checkbox" id="todoCompleted">
+
+      <button type="submit">추가</button>
+    </form>
+  </div>
 </div>
 
 <script src="/js/main.js" crossorigin="anonymous"></script>

@@ -1,5 +1,15 @@
-// 전역 변수로 todos 배열을 선언합니다.
+// 전역 변수로 todos 배열을 선언
 let todos = [];
+
+// 모달 관련 함수들
+function openModal() {
+    document.getElementById('todoModal').style.display = 'block';
+}
+
+function closeModal() {
+    document.getElementById('todoModal').style.display = 'none';
+    document.getElementById('todoForm').reset();
+}
 
 // 헤더에 토큰을 추가하는 함수
 function getHeaders() {
@@ -76,19 +86,19 @@ function updateTodo(id, completed) {
 }
 
 // 새로운 Todo 항목을 추가하는 함수
-function addTodo() {
-    const newTodoInput = document.getElementById('newTodoInput');
-    const title = newTodoInput.value.trim();
+function addTodo(event) {
+    event.preventDefault();
+    const title = document.getElementById('todoTitle').value.trim();
+    const description = document.getElementById('todoDescription').value.trim();
+    const completed = document.getElementById('todoCompleted').checked;
+
     if (!title) {
-        alert('할 일을 입력해주세요.');
+        alert('제목을 입력해주세요.');
         return;
     }
 
     const headers = getHeaders();
-    const newTodo = {
-        title: title,
-        completed: false
-    };
+    const newTodo = { title, description, completed };
 
     fetch('/api/v1/todo', {
         method: 'POST',
@@ -97,7 +107,7 @@ function addTodo() {
     })
     .then(handleResponse)
     .then(() => {
-        newTodoInput.value = ''; // 입력 필드를 비웁니다.
+        closeModal();
         return fetchTodos(); // 새로운 Todo가 추가된 후 전체 목록을 다시 가져옵니다.
     })
     .catch(error => {
@@ -137,12 +147,44 @@ function handleError(error) {
 // 페이지 로드 시 실행
 document.addEventListener('DOMContentLoaded', function () {
     console.log('DOM content loaded');
-    const token = getToken();
+    const token = localStorage.getItem('jwtToken');
     if (!token) {
         console.log('No token found on page load, redirecting to login');
         window.location.href = '/login';
     } else {
         console.log('Token found, fetching todos');
         fetchTodos().catch(handleError);
+
+        // 모달 관련 이벤트 리스너 추가
+        const addTodoButton = document.getElementById('addTodoButton');
+        if (addTodoButton) {
+            addTodoButton.addEventListener('click', openModal);
+            console.log('Add Todo button event listener added');
+        } else {
+            console.error('Add Todo button not found');
+        }
+
+        const closeButton = document.querySelector('.close');
+        if (closeButton) {
+            closeButton.addEventListener('click', closeModal);
+            console.log('Close button event listener added');
+        } else {
+            console.error('Close button not found');
+        }
+
+        const todoForm = document.getElementById('todoForm');
+        if (todoForm) {
+            todoForm.addEventListener('submit', addTodo);
+            console.log('Todo form submit event listener added');
+        } else {
+            console.error('Todo form not found');
+        }
+
+        // 모달 외부 클릭 시 닫기
+        window.addEventListener('click', (event) => {
+            if (event.target === document.getElementById('todoModal')) {
+                closeModal();
+            }
+        });
     }
 });
