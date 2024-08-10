@@ -24,6 +24,7 @@ function startTimer() {
         document.getElementById('timer').innerText = formatTime(elapsedTime);
     }, 1000);
 
+    Notification.requestPermission();
     document.getElementById('startButton').style.display = 'none';
     document.getElementById('pauseButton').style.display = 'inline-block';
     document.getElementById('pauseButton').innerText = '일시정지';
