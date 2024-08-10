@@ -60,4 +60,6 @@ spring:
     init:
       mode: never # init sql 실행 x
 
-
+  web:
+    resources:
+      static-locations=classpath:/static/:
