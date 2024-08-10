@@ -41,6 +41,7 @@ function pauseTimer() {
 function controlTimer(data){
     if(data == 0 && !isPaused) {
         console.log('stop');
+        // 알림 기능 추가
         pauseTimer()
     }else if(data == 1 && isPaused){
         console.log('start');
