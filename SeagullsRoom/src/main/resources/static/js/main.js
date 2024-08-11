@@ -119,10 +119,21 @@ document.getElementById('startButton').addEventListener('click',
                 };
             });
 
-            var startX = 0;
-            var startY = 0;
-            const captureWidth = 700;
-            const captureHeight = 500;
+        var startX = 0;
+        var startY = 0;
+        const captureWidth = 700;
+        const captureHeight = 500;
+
+        await webgazer.getCurrentPrediction().then(prediction => {
+            if (prediction) {
+                startX = prediction.x;
+                startY = prediction.y;
+                console.log(`Current Prediction - X: ${startX}, Y: ${startY}`);
+            }
+        });
+
+        const context = canvas.getContext('2d');
+        context.drawImage(screenVideo, startX, startY, captureWidth, captureHeight, 0, 0, captureWidth, captureHeight);
 
             await webgazer.getCurrentPrediction().then(prediction => {
                 if (prediction) {
@@ -258,5 +269,6 @@ document.getElementById('calibrationButton').addEventListener('click',
         //         console.error('There was a problem with the fetch operation:', error);
         //     });
 
-        location.href = '../calibration.html';
-    });
+document.getElementById('calibrationButton').addEventListener('click', function() {
+    location.href = '../calibration.html';
+});

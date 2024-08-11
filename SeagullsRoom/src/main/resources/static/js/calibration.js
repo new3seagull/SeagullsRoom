@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const newOpacity = 1 - (clicks / maxClicks); // 투명도 계산
             circle.style.opacity = newOpacity;
 
-            if (clicks >= maxClicks) {
+            if (clicks == maxClicks) {
                 setTimeout(() => circle.style.display = 'none', 300); // 클릭 후 사라지기
                 clickedCircles++;
                 if (clickedCircles === totalCircles) {
