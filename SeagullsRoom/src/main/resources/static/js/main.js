@@ -2,6 +2,7 @@ let timerInterval;
 let startTime;
 let pausedTime = 0;
 let isPaused = false;
+let gazerInterval;
 
 const canvas = document.getElementById('canvas');
 const screenVideo = document.getElementById('screenVideo');
@@ -13,8 +14,7 @@ function formatTime(ms) {
     let minutes = Math.floor((totalSeconds % 3600) / 60);
     let seconds = totalSeconds % 60;
 
-    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2,
-        '0')}:${String(seconds).padStart(2, '0')}`;
+    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 }
 
 function startTimer() {
@@ -43,25 +43,21 @@ function pauseTimer() {
 function controlTimer(data) {
     if (data == 0 && !isPaused) {
         console.log('stop');
-        pauseTimer()
+        pauseTimer();
 
-        // 알림 기능
         var img = "/images/logo.png";
         var text = '공부에 집중하세요. 타이머가 정지됩니다.';
-        var notification = new Notification("SeagullsRoom", {
-            body: text,
-            icon: img
-        });
-
+        var notification = new Notification("SeagullsRoom", { body: text, icon: img });
         setTimeout(notification.close.bind(notification), 4000);
     } else if (data == 1 && isPaused) {
         console.log('start');
         startTimer();
-      
+    }
+}
+
 function appendMessage(sender, message, imageFile = null, isSent = false) {
     const chatMessages = document.getElementById('chatMessages');
 
-    // 이미지 메시지 추가
     if (imageFile) {
         const imageContainer = document.createElement('div');
         imageContainer.classList.add('message-container', isSent ? 'sent' : 'received');
@@ -69,13 +65,12 @@ function appendMessage(sender, message, imageFile = null, isSent = false) {
         const img = document.createElement('img');
         img.src = URL.createObjectURL(imageFile);
         img.alt = 'Image';
-        imageContainer.classList.add('capture')
+        imageContainer.classList.add('capture');
         imageContainer.appendChild(img);
 
         chatMessages.appendChild(imageContainer);
     }
 
-    // 텍스트 메시지 추가
     if (message) {
         const messageContainer = document.createElement('div');
         messageContainer.classList.add('message-container', isSent ? 'sent' : 'received');
@@ -97,27 +92,23 @@ function appendMessage(sender, message, imageFile = null, isSent = false) {
         chatMessages.appendChild(messageContainer);
     }
 
-    chatMessages.scrollTop = chatMessages.scrollHeight; // 자동 스크롤
+    chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
-document.getElementById('startButton').addEventListener('click',
-    async function () {
-        mediaStream = await navigator.mediaDevices.getDisplayMedia(
-            {video: true});
+document.getElementById('startButton').addEventListener('click', async function () {
+    mediaStream = await navigator.mediaDevices.getDisplayMedia({video: true});
 
-        await webgazer.setRegression('ridge').saveDataAcrossSessions(
-            true).begin();
-        webgazer.showVideoPreview(false); //.applyKalmanFilter(false);
-        // webgazer.clearData();
+    await webgazer.setRegression('ridge').saveDataAcrossSessions(true).begin();
+    webgazer.showVideoPreview(false);
 
-        startTimer();
-        gazerInterval = setInterval(async function () {
-            screenVideo.srcObject = mediaStream;
-            await new Promise((resolve) => {
-                screenVideo.onloadedmetadata = () => {
-                    resolve();
-                };
-            });
+    startTimer();
+    gazerInterval = setInterval(async function () {
+        screenVideo.srcObject = mediaStream;
+        await new Promise((resolve) => {
+            screenVideo.onloadedmetadata = () => {
+                resolve();
+            };
+        });
 
         var startX = 0;
         var startY = 0;
@@ -135,44 +126,14 @@ document.getElementById('startButton').addEventListener('click',
         const context = canvas.getContext('2d');
         context.drawImage(screenVideo, startX, startY, captureWidth, captureHeight, 0, 0, captureWidth, captureHeight);
 
-            await webgazer.getCurrentPrediction().then(prediction => {
-                if (prediction) {
-                    startX = prediction.x;
-                    startY = prediction.y;
-                    console.log(
-                        `Current Prediction - X: ${startX}, Y: ${startY}`);
-                }
-            });
-            console.log("2_3");
-            const context = canvas.getContext('2d');
-            context.drawImage(screenVideo, startX, startY, captureWidth,
-                captureHeight, 0, 0, captureWidth, captureHeight);
+        canvas.toBlob((blob) => {
+            const imageFile = new File([blob], 'screenshot.png', {type: 'image/png'});
 
-            canvas.toBlob((blob) => {
-                // blob을 파일 객체로 변환
-                const imageFile = new File([blob], 'screenshot.png',
-                    {type: 'image/png'});
-
-                // API 요청에 파일을 포함시켜 전송
-                if (imageFile) {
-                    const formData = new FormData();
-                    formData.append('image', imageFile);
-                    const jwtToken = localStorage.getItem('jwtToken');
-
-                    fetch('http://localhost:8080/api/v1/gpt/chat', {
-                        method: 'POST',
-                        headers: {
-                            'Authorization': `${jwtToken}`
-                        },
-                        body: formData
-                    })
-
-            // API 요청에 파일을 포함시켜 전송
             if (imageFile) {
                 const formData = new FormData();
                 formData.append('image', imageFile);
                 const jwtToken = localStorage.getItem('jwtToken');
-                appendMessage('클라이언트', "위 이미지가 공부와 관련이 있으면 1을 없으면 0을 출력해 줘", imageFile, true); // gpt에 요청을 할 내용 챗봇에 추가
+                appendMessage('클라이언트', "위 이미지가 공부와 관련이 있으면 1을 없으면 0을 출력해 줘", imageFile, true);
                 fetch('http://localhost:8080/api/v1/gpt/chat', {
                     method: 'POST',
                     headers: {
@@ -180,35 +141,29 @@ document.getElementById('startButton').addEventListener('click',
                     },
                     body: formData
                 })
-                    .then(response => response.text())
-                    .then(data => {
-                        // document.getElementById('responseContent').textContent = data;
-                        console.log(data + " data")
-                        controlTimer(data);
-                        appendMessage('GPT4-o: ', data); //gpt의 응답
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                    });
-                } else {
-                    alert('Please select an image file.');
-                }
-            });
-        }, 5000);
-
-    });
-
-function controlTimer(data){
-    if(data == 0 && !isPaused) {
-        console.log('stop');
-        pauseTimer()
-    }else if(data == 1 && isPaused){
-        console.log('start');
-        startTimer();
-    }
-}
+                .then(response => response.text())
+                .then(data => {
+                    console.log(data + " data");
+                    controlTimer(data);
+                    appendMessage('GPT4-o: ', data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            } else {
+                alert('Please select an image file.');
+            }
+        });
+    }, 5000);
+});
 
 document.getElementById('pauseButton').addEventListener('click', function() {
+    if (isPaused) {
+        startTimer();
+    } else {
+        pauseTimer();
+    }
+});
 
 document.getElementById('stopButton').addEventListener('click', function () {
     clearInterval(timerInterval);
@@ -238,36 +193,6 @@ document.getElementById('stopButton').addEventListener('click', function () {
     document.getElementById('pauseButton').style.display = 'none';
     document.getElementById('stopButton').style.display = 'none';
 });
-  
-document.getElementById('calibrationButton').addEventListener('click',
-    function () {
-
-        // fetch('http://localhost:8080/api/v1/studies', {
-        //     method: 'GET',
-        //     headers: {
-        //         'Authorization': localStorage.getItem('jwtToken'),
-        //     },
-        // })
-        //     .then(response => {
-        //         if (!response.ok) {
-        //             throw new Error('Network response was not ok ' + response.statusText);
-        //         }
-        //         return response.json(); // 응답을 JSON으로 변환
-        //     })
-        //     .then(data => {
-        //         // JSON 데이터가 배열 형태로 들어옴
-        //         data.forEach(item => {
-        //             console.log(`ID: ${item.id}`);
-        //             console.log(`User Email: ${item.userEmail}`);
-        //             console.log(`Study Time: ${item.studyTime}`);
-        //             console.log(`Created At: ${item.createdAt}`);
-        //             console.log(`Updated At: ${item.updatedAt}`);
-        //             console.log('---');
-        //         });
-        //     })
-        //     .catch(error => {
-        //         console.error('There was a problem with the fetch operation:', error);
-        //     });
 
 document.getElementById('calibrationButton').addEventListener('click', function() {
     location.href = '../calibration.html';

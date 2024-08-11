@@ -37,13 +37,12 @@
       <span class="nav-text">My Page</span>
     </a>
   </li>
-
-  <li class="darkerlishadow">
-    <a href="http://startific.com">
-      <i class="fa fa-clock-o fa-lg"></i>
-      <span class="nav-text">News</span>
-    </a>
-  </li>
+  <div id="todoHeader">
+    <h3>TODO</h3>
+    <button id="addTodoButton">+</button>
+  </div>
+  <ul id="todoList">
+  </ul>
 </nav>
 
 <!-- Todo Modal -->
@@ -64,22 +63,22 @@
       <button type="submit">추가</button>
     </form>
   </div>
+</div>
 
-  <div id="container">
-    <div class="clock">
-      <div id="timer">00:00:00</div>
-    </div>
-    <br>
-    <button id="startButton">공부시작</button>
-    <button id="pauseButton" style="display:none;">일시정지</button>
-    <button id="stopButton" style="display:none;">종료</button>
-    <button id="calibrationButton">calibration</button>
-
-    <div id="chatContainer">
-      <div id="chatMessages" style="margin-bottom: 10px;"></div>
-    </div>
-
+<div id="container">
+  <div class="clock">
+    <div id="timer">00:00:00</div>
   </div>
+  <br>
+  <button id="startButton">공부시작</button>
+  <button id="pauseButton" style="display:none;">일시정지</button>
+  <button id="stopButton" style="display:none;">종료</button>
+  <button id="calibrationButton">calibration</button>
+
+  <div id="chatContainer">
+    <div id="chatMessages" style="margin-bottom: 10px;"></div>
+  </div>
+</div>
 
   <script src="/js/main.js" crossorigin="anonymous"></script>
   <script src="/js/todo.js"></script>
