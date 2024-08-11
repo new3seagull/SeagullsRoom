@@ -57,7 +57,47 @@ function controlTimer(data) {
     } else if (data == 1 && isPaused) {
         console.log('start');
         startTimer();
+      
+function appendMessage(sender, message, imageFile = null, isSent = false) {
+    const chatMessages = document.getElementById('chatMessages');
+
+    // 이미지 메시지 추가
+    if (imageFile) {
+        const imageContainer = document.createElement('div');
+        imageContainer.classList.add('message-container', isSent ? 'sent' : 'received');
+
+        const img = document.createElement('img');
+        img.src = URL.createObjectURL(imageFile);
+        img.alt = 'Image';
+        imageContainer.classList.add('capture')
+        imageContainer.appendChild(img);
+
+        chatMessages.appendChild(imageContainer);
     }
+
+    // 텍스트 메시지 추가
+    if (message) {
+        const messageContainer = document.createElement('div');
+        messageContainer.classList.add('message-container', isSent ? 'sent' : 'received');
+
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('message');
+
+        const senderElement = document.createElement('div');
+        senderElement.classList.add('sender');
+        senderElement.textContent = `${sender}`;
+        messageElement.appendChild(senderElement);
+
+        const messageContent = document.createElement('div');
+        messageContent.classList.add('text');
+        messageContent.textContent = message;
+        messageElement.appendChild(messageContent);
+
+        messageContainer.appendChild(messageElement);
+        chatMessages.appendChild(messageContainer);
+    }
+
+    chatMessages.scrollTop = chatMessages.scrollHeight; // 자동 스크롤
 }
 
 document.getElementById('startButton').addEventListener('click',
@@ -115,11 +155,26 @@ document.getElementById('startButton').addEventListener('click',
                         },
                         body: formData
                     })
+
+            // API 요청에 파일을 포함시켜 전송
+            if (imageFile) {
+                const formData = new FormData();
+                formData.append('image', imageFile);
+                const jwtToken = localStorage.getItem('jwtToken');
+                appendMessage('클라이언트', "위 이미지가 공부와 관련이 있으면 1을 없으면 0을 출력해 줘", imageFile, true); // gpt에 요청을 할 내용 챗봇에 추가
+                fetch('http://localhost:8080/api/v1/gpt/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `${jwtToken}`
+                    },
+                    body: formData
+                })
                     .then(response => response.text())
                     .then(data => {
                         // document.getElementById('responseContent').textContent = data;
+                        console.log(data + " data")
                         controlTimer(data);
-                        console.log(data);
+                        appendMessage('GPT4-o: ', data); //gpt의 응답
                     })
                     .catch(error => {
                         console.error('Error:', error);
@@ -132,13 +187,17 @@ document.getElementById('startButton').addEventListener('click',
 
     });
 
-document.getElementById('pauseButton').addEventListener('click', function () {
-    // if (isPaused) {
-    //     startTimer();
-    // } else {
-    //     pauseTimer();
-    // }
-});
+function controlTimer(data){
+    if(data == 0 && !isPaused) {
+        console.log('stop');
+        pauseTimer()
+    }else if(data == 1 && isPaused){
+        console.log('start');
+        startTimer();
+    }
+}
+
+document.getElementById('pauseButton').addEventListener('click', function() {
 
 document.getElementById('stopButton').addEventListener('click', function () {
     clearInterval(timerInterval);
@@ -168,7 +227,7 @@ document.getElementById('stopButton').addEventListener('click', function () {
     document.getElementById('pauseButton').style.display = 'none';
     document.getElementById('stopButton').style.display = 'none';
 });
-
+  
 document.getElementById('calibrationButton').addEventListener('click',
     function () {
 
