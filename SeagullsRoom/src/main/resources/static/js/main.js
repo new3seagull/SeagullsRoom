@@ -76,7 +76,7 @@ document.getElementById('startButton').addEventListener('click', async function(
                 console.log(`Current Prediction - X: ${startX}, Y: ${startY}`);
             }
         });
-        console.log("2_3");
+
         const context = canvas.getContext('2d');
         context.drawImage(screenVideo, startX, startY, captureWidth, captureHeight, 0, 0, captureWidth, captureHeight);
 
@@ -157,34 +157,5 @@ document.getElementById('stopButton').addEventListener('click', function() {
 
 
 document.getElementById('calibrationButton').addEventListener('click', function() {
-
-    // fetch('http://localhost:8080/api/v1/studies', {
-    //     method: 'GET',
-    //     headers: {
-    //         'Authorization': localStorage.getItem('jwtToken'),
-    //     },
-    // })
-    //     .then(response => {
-    //         if (!response.ok) {
-    //             throw new Error('Network response was not ok ' + response.statusText);
-    //         }
-    //         return response.json(); // 응답을 JSON으로 변환
-    //     })
-    //     .then(data => {
-    //         // JSON 데이터가 배열 형태로 들어옴
-    //         data.forEach(item => {
-    //             console.log(`ID: ${item.id}`);
-    //             console.log(`User Email: ${item.userEmail}`);
-    //             console.log(`Study Time: ${item.studyTime}`);
-    //             console.log(`Created At: ${item.createdAt}`);
-    //             console.log(`Updated At: ${item.updatedAt}`);
-    //             console.log('---');
-    //         });
-    //     })
-    //     .catch(error => {
-    //         console.error('There was a problem with the fetch operation:', error);
-    //     });
-
-
     location.href = '../calibration.html';
 });
