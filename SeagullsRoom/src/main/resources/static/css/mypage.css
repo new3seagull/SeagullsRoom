@@ -1,0 +1,196 @@
+/* 전체 페이지 스타일 */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+/* 사이드바 스타일 */
+.main-menu {
+    background-color: #2c3e50;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px;
+    height: 100%;
+    color: #ecf0f1;
+    padding-top: 20px;
+}
+
+.main-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.main-menu li {
+    padding: 10px 20px;
+}
+
+.main-menu a {
+    color: #ecf0f1;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+
+.main-menu i {
+    margin-right: 10px;
+}
+
+/* 컨테이너 스타일 */
+#container {
+    margin-left: 250px;
+    padding: 20px;
+}
+
+h1, h2, h3 {
+    color: #2c3e50;
+}
+
+/* 프로필 섹션 */
+#profile {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+}
+
+#profile-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 50px;
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-username {
+    display: flex;
+    align-items: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.profile-username button {
+    background: none;
+    padding: 5px 10px;
+    border-radius: 2px;
+    cursor: pointer;
+    margin-left: 50px;
+    border-width: 1px;
+}
+
+.profile-username button:hover {
+    background-color: gray;
+}
+
+.profile-username i {
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.profile-stats {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.profile-stats span {
+    font-size: 16px;
+}
+
+.profile-email {
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.profile-bio {
+    font-size: 16px;
+}
+
+/* 학습 통계 섹션 */
+#study-stats {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.stat-item {
+    background-color: white;
+    border-radius: 8px;
+    padding: 15px;
+    width: 30%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.stat-item h3 {
+    margin-top: 0;
+    color: #7f8c8d;
+}
+
+.stat-item p {
+    font-size: 24px;
+    font-weight: bold;
+    color: #2c3e50;
+    margin: 10px 0 0;
+}
+
+/* 최근 활동 섹션 */
+#recent-activity {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+#activity-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+#activity-list li {
+    padding: 10px 0;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+#activity-list li:last-child {
+    border-bottom: none;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    #container {
+        margin-left: 0;
+        padding: 10px;
+    }
+
+    #study-stats {
+        flex-direction: column;
+    }
+
+    .stat-item {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .main-menu {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+}
