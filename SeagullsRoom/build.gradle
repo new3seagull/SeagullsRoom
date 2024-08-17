@@ -30,8 +30,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
 	compileOnly 'org.projectlombok:lombok'
-	runtimeOnly 'com.h2database:h2'
-	runtimeOnly 'com.mysql:mysql-connector-j'
+	runtimeOnly 'mysql:mysql-connector-java'
 
 	//lombok
 	annotationProcessor 'org.projectlombok:lombok'
