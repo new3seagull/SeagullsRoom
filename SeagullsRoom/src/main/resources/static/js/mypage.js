@@ -25,10 +25,6 @@ window.onload = function() {
             return response.json(); // 응답을 JSON으로 변환
         })
         .then(data => {
-
-            // console.log(data)
-            // console.log(data.followerCount)
-
             document.querySelector(".profile-stats span:nth-child(1) strong").textContent = data.followerCount.toString();
             document.querySelector(".profile-stats span:nth-child(2) strong").textContent = data.followingCount.toString();
         })
