@@ -5,7 +5,7 @@ window.onload = function() {
     }
 
     function secondsToTimeString(totalSeconds) {
-        const hours = Math.floor(totalSeconds / 3600);
+        const hours = Math.floor(totalSeconds / 3600)
         const minutes = Math.floor((totalSeconds % 3600) / 60);
         const seconds = totalSeconds % 60;
         return `${hours}시간 ${minutes}분 ${seconds}초`;
@@ -26,11 +26,9 @@ window.onload = function() {
         })
         .then(data => {
 
-            console.log(data)
-            console.log(data.followerCount)
+            // console.log(data)
+            // console.log(data.followerCount)
 
-            // document.getElementById("username").textContent
-            // document.getElementById("user-email").textContent
             document.querySelector(".profile-stats span:nth-child(1) strong").textContent = data.followerCount.toString();
             document.querySelector(".profile-stats span:nth-child(2) strong").textContent = data.followingCount.toString();
         })
@@ -72,43 +70,40 @@ window.onload = function() {
         });
 
 
-    // fetch('http://localhost:8080/api/v1/studies/user/date', {
-    //     method: 'GET',
-    //     headers: {
-    //         'Authorization': localStorage.getItem('jwtToken'),
-    //         'Content-Type': 'application/json'
-    //     },
-    // })
-    //     .then(response => {
-    //         if (!response.ok) {
-    //             throw new Error('Network response was not ok ' + response.statusText);
-    //         }
-    //         return response.json(); // 응답을 JSON으로 변환
-    //     })
-    //     .then(studyData => {
-    //         // JSON 데이터가 배열 형태로 들어옴
-    //
-    //         studyData.data.forEach(item => {
-    //             console.log(`ID: ${item.id}`);
-    //             console.log(`User Email: ${item.userEmail}`);
-    //             console.log(`Study Time: ${item.studyTime}`);
-    //             console.log(`Updated At: ${item.updatedAt}`);
-    //             console.log('---');
-    //         });
-    //
-    //         let dateStudySeconds = 0
-    //
-    //         studyData.data.forEach(activity => {
-    //             dateStudySeconds += timeStringToSeconds(activity.studyTime);
-    //         })
-    //
-    //         const dateStudyTime = secondsToTimeString(dateStudySeconds);
-    //
-    //         document.getElementById('month-study-time').innerText = dateStudyTime;
-    //     })
-    //     .catch(error => {
-    //         console.error('There was a problem with the fetch operation:', error);
-    //     });
+    fetch('http://localhost:8080/api/v1/studies/user/date', {
+        method: 'GET',
+        headers: {
+            'Authorization': localStorage.getItem('jwtToken'),
+            'Content-Type': 'application/json'
+        },
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json(); // 응답을 JSON으로 변환
+        })
+        .then(studyData => {
+            // JSON 데이터가 배열 형태로 들어옴
+            const item = studyData.data;
+
+            console.log(`ID: ${item.id}`);
+            console.log(`User Email: ${item.userEmail}`);
+            console.log(`Study Time: ${item.studyTime}`);
+            console.log(`Updated At: ${item.updatedAt}`);
+            console.log('---');
+
+            let dateStudySeconds = timeStringToSeconds(item.studyTime);
+
+
+
+            const dateStudyTime = secondsToTimeString(dateStudySeconds);
+
+            document.getElementById('daily-study-time').innerText = dateStudyTime;
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
 
 
 };
