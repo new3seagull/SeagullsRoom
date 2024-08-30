@@ -1,6 +1,8 @@
 package com.new3seagull.SeagullsRoom.domain.gpt.controller;
 
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.new3seagull.SeagullsRoom.domain.gpt.dto.ChatGPTRequest;
 import com.new3seagull.SeagullsRoom.domain.gpt.dto.ChatGPTResponse;
 import com.new3seagull.SeagullsRoom.global.util.ImageUtils;
@@ -28,17 +30,20 @@ public class ChatGPTController {
 
     @PostMapping("/chat")
     public String requestGpt(@RequestPart("image") MultipartFile imageFile) {
-        String responseContent = null;
+        String category = null;
         try {
             String base64Image = ImageUtils.encodeImageToBase64(imageFile);
             ChatGPTRequest request = new ChatGPTRequest(model, base64Image);
-            ChatGPTResponse chatGPTResponse = restTemplate.postForObject(apiURL, request, ChatGPTResponse.class);
-            responseContent = chatGPTResponse.getChoices().get(0).getMessage().getContent().toString();
+
+            // API 호출하여 응답 받기
+            ChatGPTResponse response = restTemplate.postForObject(apiURL, request, ChatGPTResponse.class);
+            Object o = response.getChoices().get(0).getMessage().getFunction_call().getArguments().get("category");
+            category = o.toString();
+
         }
         catch (Exception e) {
             e.printStackTrace();
         }
-
-        return responseContent;
+        return category;
     }
 }
