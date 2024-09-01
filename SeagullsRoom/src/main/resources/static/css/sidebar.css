@@ -12,12 +12,6 @@
   font-size: 20px;
 }
 
-/*.main-menu:hover {*/
-/*    width:250px;*/
-/*    overflow:hidden;*/
-/*    opacity:1;*/
-/*}*/
-
 .main-menu {
   background: #F7F7F7;
   position: absolute;
@@ -33,10 +27,6 @@
   -webkit-transform: translateZ(0) scale(1, 1);
   box-shadow: 1px 0 15px rgba(0, 0, 0, 0.07);
   opacity: 1;
-}
-
-.main-menu > ul {
-  margin: 7px 0;
 }
 
 .main-menu li {
@@ -63,17 +53,6 @@
   text-shadow: 1px 1px 1px #fff;
 }
 
-/* .main-menu .nav-icon {
-
-    position:relative;
-    display:table-cell;
-    width:55px;
-    height:36px;
-    text-align:center;
-    vertical-align:middle;
-    font-size:18px;
-
-} */
 
 .main-menu .nav-text {
   position: relative;
