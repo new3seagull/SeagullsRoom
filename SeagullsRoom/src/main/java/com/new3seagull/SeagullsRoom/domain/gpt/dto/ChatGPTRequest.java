@@ -39,7 +39,7 @@ public class ChatGPTRequest {
                                 .category(GptFunctionDTO.Category.builder()
                                         .type("string")
                                         .description("이미지를 카테고리 중 분류하기")
-                                        .enums(List.of("공부", "게임", "SNS", "기타"))
+                                        .enums(List.of("STUDY", "PROGRAMMING", "GAME", "SNS", "OTHER"))
                                         .build())
                                 .build())
                         .required(List.of("category"))

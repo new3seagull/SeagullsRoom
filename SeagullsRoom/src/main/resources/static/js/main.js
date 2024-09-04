@@ -41,7 +41,7 @@ function pauseTimer() {
 }
 
 function controlTimer(data) {
-    if (data == 0 && !isPaused) {
+    if (data !== "STUDY" && !isPaused) {
         console.log('stop');
         pauseTimer();
 
@@ -49,7 +49,7 @@ function controlTimer(data) {
         var text = '공부에 집중하세요. 타이머가 정지됩니다.';
         var notification = new Notification("SeagullsRoom", { body: text, icon: img });
         setTimeout(notification.close.bind(notification), 4000);
-    } else if (data == 1 && isPaused) {
+    } else if (data === "STUDY" && isPaused) {
         console.log('start');
         startTimer();
     }
@@ -133,7 +133,7 @@ document.getElementById('startButton').addEventListener('click', async function 
                 const formData = new FormData();
                 formData.append('image', imageFile);
                 const jwtToken = localStorage.getItem('jwtToken');
-                appendMessage('클라이언트', "위 이미지가 공부와 관련이 있으면 1을 없으면 0을 출력해 줘", imageFile, true);
+                appendMessage('클라이언트', "주어진 이미지가 어떤 카테고리에 해당하는지 반환", imageFile, true);
                 fetch('http://localhost:8080/api/v1/gpt/chat', {
                     method: 'POST',
                     headers: {
@@ -146,6 +146,8 @@ document.getElementById('startButton').addEventListener('click', async function 
                     console.log(data + " data");
                     controlTimer(data);
                     appendMessage('GPT4-o: ', data);
+                    // LocalStorage에 카테고리 카운트 증가
+                    updateCategoryCount(data.trim());
                 })
                 .catch(error => {
                     console.error('Error:', error);
@@ -156,6 +158,19 @@ document.getElementById('startButton').addEventListener('click', async function 
         });
     }, 5000);
 });
+
+// 스크린타임 카테고리 카운트를 업데이트하는 함수
+function updateCategoryCount(category) {
+    const categories = ['STUDY', 'GAME', 'SNS', 'OTHER'];
+    if (categories.includes(category)) {
+        let count = localStorage.getItem(category) || 0;
+        count = parseInt(count) + 1;
+        localStorage.setItem(category, count);
+        console.log(`${category} count: ${count}`);
+    } else {
+        console.log(`Invalid category: ${category}`);
+    }
+}
 
 document.getElementById('pauseButton').addEventListener('click', function() {
     if (isPaused) {
