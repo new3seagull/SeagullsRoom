@@ -139,6 +139,8 @@ document.getElementById('startButton').addEventListener('click', async function 
             if (imageFile) {
                 const formData = new FormData();
                 formData.append('image', imageFile);
+                // 사용자 정의 카테고리 추가
+                formData.append('userCategories', JSON.stringify(categories));
                 const jwtToken = localStorage.getItem('jwtToken');
                 appendMessage('클라이언트', "주어진 이미지가 어떤 카테고리에 해당하는지 반환", imageFile, true);
                 fetch('http://localhost:8080/api/v1/gpt/chat', {

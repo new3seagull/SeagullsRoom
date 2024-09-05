@@ -20,21 +20,23 @@ function updateCategoryList() {
 }
 
 function addCategory(name) {
-    // 카테고리 이름을 소문자로 변환하여 대소문자 구분 없이 비교
-    const lowercaseName = name.toLowerCase();
+    // 입력된 카테고리 이름을 대문자로 변환
+    const uppercaseName = name.toUpperCase();
 
     // 중복 검사
-    if (categories.some(category => category.toLowerCase() === lowercaseName)) {
+    if (categories.some(category => category.toUpperCase() === uppercaseName)) {
         alert('이미 존재하는 카테고리입니다.');
-        return;
+        return false;
     }
 
     if (categories.length < 10) {
-        categories.push(name);
+        categories.push(uppercaseName);
         localStorage.setItem('categories', JSON.stringify(categories));
         updateCategoryList();
+        return true;
     } else {
         alert('최대 10개의 카테고리만 추가할 수 있습니다.');
+        return false;
     }
 }
 
@@ -56,10 +58,8 @@ categoryForm.onsubmit = (e) => {
     e.preventDefault();
     const categoryName = categoryNameInput.value.trim();
     if (categoryName) {
-        addCategory(categoryName);
-        categoryNameInput.value = '';
-        // 중복된 카테고리가 아닐 경우에만 모달을 닫습니다.
-        if (!categories.some(category => category.toLowerCase() === categoryName.toLowerCase())) {
+        if (addCategory(categoryName)) {
+            categoryNameInput.value = '';
             categoryModal.style.display = 'none';
         }
     }

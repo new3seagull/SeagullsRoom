@@ -1,5 +1,7 @@
 package com.new3seagull.SeagullsRoom.domain.gpt.dto;
 
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -18,7 +20,7 @@ public class ChatGPTRequest {
     private double presence_penalty;
 
 
-    public ChatGPTRequest(String model, String base64image) {
+    public ChatGPTRequest(String model, String base64image, List<String> userCategories) {
         this.model = model;
         this.messages = new ArrayList<>();
         List<Object> list = List.of(
@@ -30,21 +32,26 @@ public class ChatGPTRequest {
         this.functions = new ArrayList<>();
 
 
+        List<String> allCategories = Stream.concat(
+            Stream.of("STUDY", "PROGRAMMING", "GAME", "SNS", "OTHER"),
+            userCategories.stream()
+        ).distinct().collect(Collectors.toList());
+
         this.functions.add(GptFunctionDTO.builder()
-                .name("category")
-                .description("주어진 이미지가 어떤 카테고리에 해당하는지 반환")
-                .parameters(GptFunctionDTO.Parameters.builder()
-                        .type("object")
-                        .properties(GptFunctionDTO.Properties.builder()
-                                .category(GptFunctionDTO.Category.builder()
-                                        .type("string")
-                                        .description("이미지를 카테고리 중 분류하기")
-                                        .enums(List.of("STUDY", "PROGRAMMING", "GAME", "SNS", "OTHER"))
-                                        .build())
-                                .build())
-                        .required(List.of("category"))
+            .name("category")
+            .description("주어진 이미지가 어떤 카테고리에 해당하는지 반환")
+            .parameters(GptFunctionDTO.Parameters.builder()
+                .type("object")
+                .properties(GptFunctionDTO.Properties.builder()
+                    .category(GptFunctionDTO.Category.builder()
+                        .type("string")
+                        .description("이미지를 카테고리 중 분류하기")
+                        .enums(allCategories)
                         .build())
-                .build());
+                    .build())
+                .required(List.of("category"))
+                .build())
+            .build());
 
         this.function_call = new FunctionCall("category");
         this.temperature = 0.0;
