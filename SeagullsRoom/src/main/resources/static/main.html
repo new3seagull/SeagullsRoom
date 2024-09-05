@@ -46,9 +46,15 @@
     </div>
     <ul id="todoList">
     </ul>
+    <div id="categoryHeader">
+        <h3>카테고리</h3>
+        <button id="addCategoryButton">+</button>
+    </div>
+    <ul id="categoryList">
+    </ul>
 </nav>
 
-<!-- Todo Modal -->
+<!-- 할일 모달 -->
 <div id="todoModal" class="modal">
     <div class="modal-content">
         <span class="close">&times;</span>
@@ -62,6 +68,20 @@
 
             <label for="todoCompleted">완료 여부:</label>
             <input type="checkbox" id="todoCompleted">
+
+            <button type="submit">추가</button>
+        </form>
+    </div>
+</div>
+
+<!-- 카테고리 모달 -->
+<div id="categoryModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>새 카테고리 추가</h2>
+        <form id="categoryForm">
+            <label for="categoryName">카테고리 이름:</label>
+            <input type="text" id="categoryName" required>
 
             <button type="submit">추가</button>
         </form>
@@ -85,5 +105,6 @@
 
 <script src="/js/main.js" crossorigin="anonymous"></script>
 <script src="/js/todo.js"></script>
+<script src="/js/category.js"></script>
 </body>
 </html>

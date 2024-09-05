@@ -96,6 +96,13 @@ function appendMessage(sender, message, imageFile = null, isSent = false) {
 }
 
 document.getElementById('startButton').addEventListener('click', async function () {
+    const categories = JSON.parse(localStorage.getItem('categories')) || [];
+
+    if (categories.length < 3) {
+        alert('공부를 시작하려면 최소 3개의 카테고리를 추가해야 합니다.');
+        return;
+    }
+
     mediaStream = await navigator.mediaDevices.getDisplayMedia({video: true});
 
     await webgazer.setRegression('ridge').saveDataAcrossSessions(true).begin();
