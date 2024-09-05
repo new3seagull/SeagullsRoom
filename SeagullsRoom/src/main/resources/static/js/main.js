@@ -161,15 +161,10 @@ document.getElementById('startButton').addEventListener('click', async function 
 
 // 스크린타임 카테고리 카운트를 업데이트하는 함수
 function updateCategoryCount(category) {
-    const categories = ['STUDY', 'GAME', 'SNS', 'OTHER'];
-    if (categories.includes(category)) {
-        let count = localStorage.getItem(category) || 0;
-        count = parseInt(count) + 1;
-        localStorage.setItem(category, count);
-        console.log(`${category} count: ${count}`);
-    } else {
-        console.log(`Invalid category: ${category}`);
-    }
+    let screenTimeData = JSON.parse(localStorage.getItem('screenTimeData') || '{}');
+    screenTimeData[category] = (screenTimeData[category] || 0) + 1;
+    localStorage.setItem('screenTimeData', JSON.stringify(screenTimeData));
+    console.log(`${category} count: ${screenTimeData[category]}`);
 }
 
 document.getElementById('pauseButton').addEventListener('click', function() {
@@ -186,6 +181,7 @@ document.getElementById('stopButton').addEventListener('click', function () {
     webgazer.end();
     mediaStream.getTracks().forEach(track => track.stop());
 
+    // 공부 시간 전송
     fetch('http://localhost:8080/api/v1/studies', {
         method: 'POST',
         headers: {
@@ -197,8 +193,44 @@ document.getElementById('stopButton').addEventListener('click', function () {
         })
     })
     .then(response => response.json())
-    .then(data => console.log(data))
-    .catch(error => console.error('Error:', error));
+    .then(data => console.log('Study time sent:', data))
+    .catch(error => console.error('Error sending study time:', error));
+
+    // 스크린타임 데이터 전송 및 초기화
+    const screenTimeData = JSON.parse(localStorage.getItem('screenTimeData') || '{}');
+
+    const promises = Object.entries(screenTimeData).map(([category, count]) => {
+        return fetch('http://localhost:8080/api/v1/screenTime', {
+            method: 'POST',
+            headers: {
+                'Authorization': localStorage.getItem('jwtToken'),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                category: category,
+                count: count
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(`Screen time for ${category} sent:`, data);
+            return data;
+        })
+        .catch(error => {
+            console.error(`Error sending screen time for ${category}:`, error);
+            throw error;
+        });
+    });
+
+    Promise.all(promises)
+    .then(() => {
+        console.log('All screen time data sent successfully');
+        // localStorage의 스크린타임 데이터 초기화
+        localStorage.setItem('screenTimeData', JSON.stringify({}));
+    })
+    .catch(error => {
+        console.error('Error sending some screen time data:', error);
+    });
 
     document.getElementById('timer').innerText = '00:00:00';
     pausedTime = 0;

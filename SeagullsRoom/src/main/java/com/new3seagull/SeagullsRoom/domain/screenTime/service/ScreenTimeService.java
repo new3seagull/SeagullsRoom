@@ -1,6 +1,5 @@
 package com.new3seagull.SeagullsRoom.domain.screenTime.service;
 
-import static com.new3seagull.SeagullsRoom.global.error.ExceptionCode.DUPLICATE_TODO_TITLE;
 import static com.new3seagull.SeagullsRoom.global.error.ExceptionCode.USER_NOT_FOUND;
 
 import com.new3seagull.SeagullsRoom.domain.screenTime.dto.ScreenTimeRequestDto;
