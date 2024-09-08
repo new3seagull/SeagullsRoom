@@ -41,7 +41,7 @@ function pauseTimer() {
 }
 
 function controlTimer(data) {
-    if (data == 0 && !isPaused) {
+    if (data !== "STUDY" && !isPaused) {
         console.log('stop');
         pauseTimer();
 
@@ -49,7 +49,7 @@ function controlTimer(data) {
         var text = '공부에 집중하세요. 타이머가 정지됩니다.';
         var notification = new Notification("SeagullsRoom", { body: text, icon: img });
         setTimeout(notification.close.bind(notification), 4000);
-    } else if (data == 1 && isPaused) {
+    } else if (data === "STUDY" && isPaused) {
         console.log('start');
         startTimer();
     }
@@ -96,6 +96,13 @@ function appendMessage(sender, message, imageFile = null, isSent = false) {
 }
 
 document.getElementById('startButton').addEventListener('click', async function () {
+    const categories = JSON.parse(localStorage.getItem('categories')) || [];
+
+    if (categories.length < 3) {
+        alert('공부를 시작하려면 최소 3개의 카테고리를 추가해야 합니다.');
+        return;
+    }
+
     mediaStream = await navigator.mediaDevices.getDisplayMedia({video: true});
 
     await webgazer.setRegression('ridge').saveDataAcrossSessions(true).begin();
@@ -132,8 +139,10 @@ document.getElementById('startButton').addEventListener('click', async function 
             if (imageFile) {
                 const formData = new FormData();
                 formData.append('image', imageFile);
+                // 사용자 정의 카테고리 추가
+                formData.append('userCategories', JSON.stringify(categories));
                 const jwtToken = localStorage.getItem('jwtToken');
-                appendMessage('클라이언트', "위 이미지가 공부와 관련이 있으면 1을 없으면 0을 출력해 줘", imageFile, true);
+                appendMessage('클라이언트', "주어진 이미지가 어떤 카테고리에 해당하는지 반환", imageFile, true);
                 fetch('http://localhost:8080/api/v1/gpt/chat', {
                     method: 'POST',
                     headers: {
@@ -146,6 +155,8 @@ document.getElementById('startButton').addEventListener('click', async function 
                     console.log(data + " data");
                     controlTimer(data);
                     appendMessage('GPT4-o: ', data);
+                    // LocalStorage에 카테고리 카운트 증가
+                    updateCategoryCount(data.trim());
                 })
                 .catch(error => {
                     console.error('Error:', error);
@@ -156,6 +167,14 @@ document.getElementById('startButton').addEventListener('click', async function 
         });
     }, 5000);
 });
+
+// 스크린타임 카테고리 카운트를 업데이트하는 함수
+function updateCategoryCount(category) {
+    let screenTimeData = JSON.parse(localStorage.getItem('screenTimeData') || '{}');
+    screenTimeData[category] = (screenTimeData[category] || 0) + 1;
+    localStorage.setItem('screenTimeData', JSON.stringify(screenTimeData));
+    console.log(`${category} count: ${screenTimeData[category]}`);
+}
 
 document.getElementById('pauseButton').addEventListener('click', function() {
     if (isPaused) {
@@ -171,6 +190,7 @@ document.getElementById('stopButton').addEventListener('click', function () {
     webgazer.end();
     mediaStream.getTracks().forEach(track => track.stop());
 
+    // 공부 시간 전송
     fetch('http://localhost:8080/api/v1/studies', {
         method: 'POST',
         headers: {
@@ -182,8 +202,44 @@ document.getElementById('stopButton').addEventListener('click', function () {
         })
     })
     .then(response => response.json())
-    .then(data => console.log(data))
-    .catch(error => console.error('Error:', error));
+    .then(data => console.log('Study time sent:', data))
+    .catch(error => console.error('Error sending study time:', error));
+
+    // 스크린타임 데이터 전송 및 초기화
+    const screenTimeData = JSON.parse(localStorage.getItem('screenTimeData') || '{}');
+
+    const promises = Object.entries(screenTimeData).map(([category, count]) => {
+        return fetch('http://localhost:8080/api/v1/screenTime', {
+            method: 'POST',
+            headers: {
+                'Authorization': localStorage.getItem('jwtToken'),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                category: category,
+                count: count
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(`Screen time for ${category} sent:`, data);
+            return data;
+        })
+        .catch(error => {
+            console.error(`Error sending screen time for ${category}:`, error);
+            throw error;
+        });
+    });
+
+    Promise.all(promises)
+    .then(() => {
+        console.log('All screen time data sent successfully');
+        // localStorage의 스크린타임 데이터 초기화
+        localStorage.setItem('screenTimeData', JSON.stringify({}));
+    })
+    .catch(error => {
+        console.error('Error sending some screen time data:', error);
+    });
 
     document.getElementById('timer').innerText = '00:00:00';
     pausedTime = 0;
