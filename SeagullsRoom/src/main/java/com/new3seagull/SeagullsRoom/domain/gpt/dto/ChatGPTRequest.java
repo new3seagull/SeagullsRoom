@@ -33,7 +33,7 @@ public class ChatGPTRequest {
 
 
         List<String> allCategories = Stream.concat(
-            Stream.of("STUDY", "PROGRAMMING", "GAME", "SNS", "OTHER"),
+            Stream.of("GAME", "SNS", "OTHER"),
             userCategories.stream()
         ).distinct().collect(Collectors.toList());
 
