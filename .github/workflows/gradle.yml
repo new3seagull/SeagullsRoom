@@ -45,8 +45,8 @@ jobs:
     - name: web docker build and push
       run: |
         docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-        docker build -t ${{ secrets.DOCKER_REPO }}/second-eyes-web .
-        docker push ${{ secrets.DOCKER_REPO }}/second-eyes-web
+        docker build -t ${{ secrets.DOCKER_REPO }}/seagullsroom .
+        docker push ${{ secrets.DOCKER_REPO }}/seagullsroom
 
     ## docker compose up
     - name: executing remote ssh commands using password
