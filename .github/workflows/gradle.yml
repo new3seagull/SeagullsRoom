@@ -34,7 +34,7 @@ jobs:
         echo "${{ secrets.APPLICATION }}" >> ./application.yml
 
     - name: Build with Gradle
-      run: ./gradlew bootJar
+      run: ./SeagullsRoom/gradlew bootJar
     
     
         ## 웹 이미지 빌드 및 도커허브에 push
