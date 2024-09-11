@@ -37,7 +37,8 @@ jobs:
       run: chmod +x ./SeagullsRoom/gradlew
 
     - name: Build with Gradle
-      run: ./SeagullsRoom/gradlew bootJar
+      run: ./gradlew bootJar
+      working-directory: ./SeagullsRoom
     
     
         ## 웹 이미지 빌드 및 도커허브에 push
