@@ -1,0 +1,10 @@
+version: '3'
+services:
+
+  web:
+    container_name: web
+    image: rmswjdtn/second-eyes-web
+    expose:
+      - 8080
+    ports:
+      - 8080:8080
