@@ -56,7 +56,6 @@ jobs:
         username: ubuntu
         key: ${{ secrets.KEY }}
         script: |
-#          sudo docker rm -f $(docker ps -qa)
           sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
           docker-compose up -d
           docker image prune -f
