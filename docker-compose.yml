@@ -3,7 +3,7 @@ services:
 
   web:
     container_name: web
-    image: rmswjdtn/second-eyes-web
+    image: qlcskfgod/seagullsroom
     expose:
       - 8080
     ports:
