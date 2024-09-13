@@ -8,6 +8,7 @@ import java.security.Principal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,9 +21,16 @@ public class ScreenTimeController {
 
     private final ScreenTimeService screenTimeService;
 
+    @GetMapping
+    public ResponseEntity<ScreenTimeResponseDto> getScreenTime(Principal principal) {
+        return ResponseEntity.status(HttpStatus.OK)
+            .body(screenTimeService.getScreenTime(principal.getName()));
+    }
+
     @PostMapping
     public ResponseEntity<ScreenTimeResponseDto> addScreenTime(Principal principal,
         @Valid @RequestBody ScreenTimeRequestDto requestDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(screenTimeService.addScreenTime(principal.getName(), requestDto));
+        return ResponseEntity.status(HttpStatus.CREATED)
+            .body(screenTimeService.addScreenTime(principal.getName(), requestDto));
     }
 }
