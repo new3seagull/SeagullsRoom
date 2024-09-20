@@ -8,10 +8,6 @@ window.onload = function(){
     var timeCell = newRow.insertCell(2);
     var mailCell = newRow.insertCell(3);
 
-    rankCell.innerHTML = '3';
-    nameCell.innerHTML = '김상유';
-    timeCell.innerHTML = '10:00:01';
-    mailCell.innerHTML = 'Kim@naver.com';
 
     fetch('http://localhost:8080/api/v1/studies/top10', {
         method: 'GET',
@@ -29,7 +25,7 @@ window.onload = function(){
         .then(studyRank => {
             console.log("here!!")
             console.log(studyRank)
-            studyRank.data.forEach(activity => {
+            studyRank.data.forEach((activity, index) => {  // index 추가
                 var newRow = table.insertRow();
 
                 var rankCell = newRow.insertCell(0);
@@ -39,9 +35,9 @@ window.onload = function(){
 
                 console.log(activity);
 
-
-                rankCell.innerHTML = activity.id;
-                nameCell.innerHTML = '이름 내놔';
+                // 순위 인덱스는 index + 1로 설정
+                rankCell.innerHTML = index + 1;
+                nameCell.innerHTML = activity.name;
                 timeCell.innerHTML = activity.studyTime;
                 mailCell.innerHTML = activity.userEmail;
             })
