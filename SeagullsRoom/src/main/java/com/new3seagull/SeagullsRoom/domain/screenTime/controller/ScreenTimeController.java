@@ -5,6 +5,7 @@ import com.new3seagull.SeagullsRoom.domain.screenTime.dto.ScreenTimeResponseDto;
 import com.new3seagull.SeagullsRoom.domain.screenTime.service.ScreenTimeService;
 import jakarta.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class ScreenTimeController {
     private final ScreenTimeService screenTimeService;
 
     @GetMapping
-    public ResponseEntity<ScreenTimeResponseDto> getScreenTime(Principal principal) {
+    public ResponseEntity<List<ScreenTimeResponseDto>> getScreenTime(Principal principal) {
         return ResponseEntity.status(HttpStatus.OK)
             .body(screenTimeService.getScreenTime(principal.getName()));
     }
