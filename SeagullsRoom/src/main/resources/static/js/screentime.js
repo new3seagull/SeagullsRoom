@@ -15,7 +15,6 @@ function fetchScreenTimeData() {
     .then(response => response.json())
     .then(data => {
         displayScreenTimeData(data);
-        createDonutChart(data);
     })
     .catch(error => {
         console.error('Error fetching screen time data:', error);
@@ -34,14 +33,24 @@ function displayScreenTimeData(data) {
     // 총 시간을 계산
     const totalTime = data.reduce((sum, item) => sum + item.count, 0);
 
+    // 백분율 계산
+    let sortedData = data.map(item => ({
+        category: item.category,
+        count: item.count,
+        percentage: (item.count / totalTime) * 100
+    })).sort((a, b) => b.percentage - a.percentage);
+
     let html = '<ul>';
-    data.forEach(item => {
-        const percentage = ((item.count / totalTime) * 100).toFixed(2);  // 백분율 계산
-        html += `<li>${item.category}: ${percentage}%</li>`;  // 백분율로 표시
+    sortedData.forEach(item => {
+        // 추후 시간 표시 기능 추가
+        // html += `<li>${item.category}: ${item.percentage.toFixed(2)}% (${item.count} minutes)</li>`;
+        html += `<li>${item.category}: ${item.percentage.toFixed(2)}%</li>`;
     });
     html += '</ul>';
 
     screenTimeDataElement.innerHTML = html;
+
+    createDonutChart(sortedData);
 }
 
 const colors = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#FF9999', '#66CCCC', '#FFCC99', '#99CC99'];
