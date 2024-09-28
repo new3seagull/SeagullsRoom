@@ -95,7 +95,7 @@ function createLegend(data) {
         colorBox.style.backgroundColor = colors[index % colors.length];
 
         const text = document.createElement('span');
-        text.textContent = `${item.category}: ${item.count} min`;
+        text.textContent = `${item.category}`;
 
         legendItem.appendChild(colorBox);
         legendItem.appendChild(text);
