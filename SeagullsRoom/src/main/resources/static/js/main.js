@@ -41,7 +41,8 @@ function pauseTimer() {
 }
 
 function controlTimer(data) {
-    if (data !== "STUDY" && !isPaused) {
+    const stopCategories = ["GAME", "SNS", "OTHER"];
+    if (stopCategories.includes(data) && !isPaused) {
         console.log('stop');
         pauseTimer();
 
