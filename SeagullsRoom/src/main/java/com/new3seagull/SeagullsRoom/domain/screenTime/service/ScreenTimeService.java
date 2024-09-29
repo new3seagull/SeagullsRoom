@@ -10,6 +10,8 @@ import com.new3seagull.SeagullsRoom.domain.user.entity.User;
 import com.new3seagull.SeagullsRoom.domain.user.repository.UserRepository;
 import com.new3seagull.SeagullsRoom.global.error.CustomException;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,26 @@ public class ScreenTimeService {
 
     private final ScreenTimeRepository screenTimeRepository;
     private final UserRepository userRepository;
+
+    public List<ScreenTimeResponseDto> getScreenTime(String email) {
+        User user = userRepository.findByEmail(email);
+
+        if (user == null) {
+            throw new CustomException(USER_NOT_FOUND);
+        }
+
+        // 사용자의 전체 스크린 타임 조회
+        List<Object[]> results = screenTimeRepository.findScreenTimesByUserGroupByCategory(user);
+
+        return results.stream().map(result -> {
+            String category = (String) result[0];
+            Long totalCount = (Long) result[1];
+            return ScreenTimeResponseDto.builder()
+                .category(category)
+                .count(totalCount.intValue())
+                .build();
+        }).collect(Collectors.toList());
+    }
 
     public ScreenTimeResponseDto addScreenTime(String email, ScreenTimeRequestDto requestDto) {
         User user = userRepository.findByEmail(email);
