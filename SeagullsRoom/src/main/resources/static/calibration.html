@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="css/calibration.css">
 </head>
 <body>
+<canvas id="plotting_canvas"></canvas>
 <div id="circle-container"></div>
 <button id="restart-button" style="display: none;">다시하기</button>
 <button id="next-button" style="display: none;">이동</button>
@@ -21,7 +22,19 @@
     </div>
 </div>
 
+
+<!-- Require the peer dependencies of face-landmarks-detection. -->
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core"></script>
+<!-- You must explicitly require a TF.js backend if you're not using the TF.js union bundle. -->
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/face-landmarks-detection"></script>
+
+
+<script src="/js/mat.js"></script>
+<script src="/js/eyetracker.js"></script>
+
 <script src="js/calibration.js"></script>
-<script src="js/webgazer.js"></script>
+
 </body>
 </html>

@@ -1,5 +1,16 @@
 document.addEventListener('DOMContentLoaded', async () => {
 
+    const canvas_plot = document.getElementById("plotting_canvas");
+    const ctx_plot = canvas_plot.getContext("2d");
+
+    function resizeCanvas() {
+        canvas_plot.width = window.innerWidth;
+        canvas_plot.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas);
+
+
     function helpModalShow() {
         const helpModal = document.getElementById('helpModal');
         helpModal.style.display = 'block';
@@ -18,10 +29,36 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     helpModalShow();
 
+    const eyetracker = getInstance();
+    await eyetracker.begin();
 
-    await webgazer.setRegression('ridge').saveDataAcrossSessions(false).begin();
+    function updateGazeCoordinates() {
+        eyetracker.predict().then(gazeCoordinates => {
+            if (gazeCoordinates) {
+                // console.log('Predicted gaze coordinates:', gazeCoordinates);
+                bound(gazeCoordinates);
+                gazeWindow.add(gazeCoordinates.x, gazeCoordinates.y)
+                const avgCoordinates = gazeWindow.getAverage();
+                if (avgCoordinates){
+                    drawCoordinates("red", gazeCoordinates.x, gazeCoordinates.y);
+                }
+
+
+            } else {
+                console.log('Gaze coordinates not available.');
+            }
+        }).catch(error => {
+            console.error('Error predicting gaze:', error);
+        });
+    }
+    setInterval(updateGazeCoordinates, 100); // 100ms마다 호출
+
+    // document.addEventListener('click', async (event) => {
+    //     await eyetracker.handleClick(event);
+    // });
+    // await webgazer.setRegression('ridge').saveDataAcrossSessions(false).begin();
     // webgazer.showVideoPreview(false); //.applyKalmanFilter(false);
-    webgazer.clearData();
+    // webgazer.clearData();
 
 
     const container = document.getElementById('circle-container');
@@ -81,7 +118,70 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // 버튼 클릭 시 페이지 이동
     nextButton.addEventListener('click', () => {
-        webgazer.end();
+        // webgazer.end();
         location.href = 'main.html';
     });
+
+
+
+    function drawCoordinates(colour, x, y) {
+        ctx_plot.clearRect(0, 0, canvas_plot.width, canvas_plot.height); // 이전 원 지우기
+        ctx_plot.fillStyle = colour;
+        ctx_plot.beginPath();
+        ctx_plot.arc(x, y, 10, 0, Math.PI * 2, true); // 반지름 10짜리 원 그리기
+        ctx_plot.fill();
+    }
+
+    function bound(prediction){
+        if(prediction.x < 0)
+            prediction.x = 0;
+        if(prediction.y < 0)
+            prediction.y = 0;
+        var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+        var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+        if(prediction.x > w){
+            prediction.x = w;
+        }
+
+        if(prediction.y > h)
+        {
+            prediction.y = h;
+        }
+        return prediction;
+    }
+
+
+    class WindowSlice {
+        constructor(size)
+        {
+            this.size = size;
+            this.data = [];
+        }
+
+        add(x, y) {
+            if (this.data.length >= this.size) {
+                this.data.shift();
+            }
+            this.data.push({x, y});
+        }
+
+        getAverage() {
+            if (this.data.length === 0){
+                return null;
+            }
+
+            const sum = this.data.reduce((acc, val) => {
+                acc.x += val.x;
+                acc.y += val.y;
+                return acc;
+            }, {x: 0, y: 0});
+
+            return {
+                x: sum.x / this.data.length,
+                y: sum.y / this.data.length
+            };
+        }
+    }
+
+    const gazeWindow = new WindowSlice(4);
 });
