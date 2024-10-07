@@ -1,0 +1,16 @@
+### 사용자의 스크린 타임 조회
+GET http://localhost:8080/api/v1/screenTime
+Authorization: Bearer {{auth_token}}
+
+### 스크린 타임 추가
+POST http://localhost:8080/api/v1/screenTime
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "category": "PROGRAMMING",
+  "count": 30
+}
+
+### 변수 설정
+@auth_token = eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3QxMjNAbmF2ZXIuY29tIiwicm9sZSI6IlJPTEVfVVNFUiIsImlhdCI6MTcyNjkyNTY5MCwiZXhwIjoxNzI2OTI5MjkwfQ.IJekKDoorzpD0Li4dwJcHSFfMoZKJrVMIa_Cn1-Vlno

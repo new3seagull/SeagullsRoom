@@ -43,13 +43,17 @@ public class ChatGPTController {
         String category = null;
         try {
             String base64Image = ImageUtils.encodeImageToBase64(imageFile);
-            ChatGPTRequest request = new ChatGPTRequest(model, base64Image);
+
+            // userCategories JSON 문자열을 List<String>으로 변환
+            List<String> userCategories = objectMapper.readValue(userCategoriesJson, new TypeReference<List<String>>() {});
+
+            // 사용자 정의 카테고리를 포함하여 ChatGPTRequest 생성
+            ChatGPTRequest request = new ChatGPTRequest(model, base64Image, userCategories);
 
             // API 호출하여 응답 받기
             ChatGPTResponse response = restTemplate.postForObject(apiURL, request, ChatGPTResponse.class);
             Object o = response.getChoices().get(0).getMessage().getFunction_call().getArguments().get("category");
             category = o.toString();
-
         }
         catch (Exception e) {
             e.printStackTrace();

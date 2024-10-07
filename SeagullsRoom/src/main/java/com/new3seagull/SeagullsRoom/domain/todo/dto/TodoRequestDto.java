@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TodoRequestDto {
+
     @NotBlank(message = "제목은 비워둘 수 없습니다.")
     @Size(min = 1, max = 100, message = "제목은 1자 이상 100자 이하여야 합니다.")
     @Pattern(regexp = "^[a-zA-Z0-9가-힣\\s()\\[\\]+\\-&/_.,]+$",
