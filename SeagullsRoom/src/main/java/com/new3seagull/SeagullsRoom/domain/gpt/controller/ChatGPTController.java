@@ -1,13 +1,17 @@
 package com.new3seagull.SeagullsRoom.domain.gpt.controller;
 
-
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.new3seagull.SeagullsRoom.domain.gpt.dto.ChatGPTRequest;
 import com.new3seagull.SeagullsRoom.domain.gpt.dto.ChatGPTResponse;
 import com.new3seagull.SeagullsRoom.global.util.ImageUtils;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -18,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/api/v1/gpt")
 @RequiredArgsConstructor
+@Tag(name = "ChatGPT", description = "ChatGPT API")
 public class ChatGPTController {
     @Value("${openai.model}")
     private String model;
@@ -27,9 +32,14 @@ public class ChatGPTController {
 
     private final RestTemplate restTemplate;
 
-
-    @PostMapping("/chat")
-    public String requestGpt(@RequestPart("image") MultipartFile imageFile) {
+    @PostMapping(value = "/chat", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(summary = "Request GPT for image analysis",
+        description = "Sends an image to GPT for analysis and returns the category")
+    @ApiResponse(responseCode = "200", description = "Successful operation",
+        content = @Content(schema = @Schema(type = "string")))
+    public String requestGpt(
+        @Parameter(description = "Image file to be analyzed", required = true)
+        @RequestPart("image") MultipartFile imageFile) {
         String category = null;
         try {
             String base64Image = ImageUtils.encodeImageToBase64(imageFile);
