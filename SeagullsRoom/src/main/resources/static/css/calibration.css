@@ -89,3 +89,13 @@ button:hover {
     text-decoration: none;
     cursor: pointer;
 }
+
+canvas {
+    position: absolute;  /* 절대 위치 지정 */
+    top: 0;
+    left: 0;
+    width: 100vw;        /* 화면 전체 너비 */
+    height: 100vh;       /* 화면 전체 높이 */
+    z-index: 9999;       /* 최상단으로 설정 */
+    pointer-events: none; /* 클릭 이벤트 무시 */
+}
