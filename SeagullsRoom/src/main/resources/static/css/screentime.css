@@ -1,0 +1,61 @@
+#container {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#screenTimeData {
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: 20px;
+}
+
+#screenTimeData ul {
+  list-style-type: none;
+  padding: 0;
+  columns: 2;
+  -webkit-columns: 2;
+  -moz-columns: 2;
+}
+
+#screenTimeData li {
+  margin-bottom: 10px;
+  break-inside: avoid-column;
+}
+
+.chart-container {
+  width: 400px;
+  height: 400px;
+  position: relative;
+  margin: 20px auto;
+}
+
+.legend {
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  margin: 5px 10px;
+  width: calc(25% - 20px);  /* 4개씩 한 줄에 표시 */
+}
+
+.color-box {
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .legend-item {
+    width: calc(50% - 20px);  /* 모바일에서는 2개씩 한 줄에 표시 */
+  }
+}

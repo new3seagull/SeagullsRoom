@@ -57,7 +57,8 @@ public class SecurityConfig {
         //경로별 인가 작업
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/", "/calibration.html", "/mypage.html", "/gpt.html", "/join", "/api/v1/users", "/auth.html", "/login.html", "/calibration.html", "/signup.html", "/main.html", "/h2-console/**", "/favicon.ico", "/css/**", "/js/**", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/images/**").permitAll()
+                        .requestMatchers("/", "/rank.html", "/calibration.html", "/mypage.html", "/gpt.html", "/join", "/api/v1/users", "/auth.html", "/login.html", "/calibration.html", "/signup.html", "/main.html", "/h2-console/**", "/favicon.ico", "/css/**", "/js/**", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/images/**", "/screentime.html").permitAll()
+
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .anyRequest().authenticated());
         //JWTFilter 등록
