@@ -14,6 +14,7 @@ public class StudyResponseDto {
     private String userEmail;
     private LocalTime studyTime;
     private LocalDateTime updatedAt;
+    private String name;
 
 
     public static StudyResponseDto toDto(Study study) {
@@ -22,6 +23,7 @@ public class StudyResponseDto {
             .userEmail(study.getUser().getEmail())
             .studyTime(study.getStudyTime())
             .updatedAt(study.getUpdatedAt())
+             .name(study.getUser().getName())
             .build();
     }
 }
