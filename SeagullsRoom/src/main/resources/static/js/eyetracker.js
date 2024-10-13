@@ -1,4 +1,3 @@
-// import * as mat from './mat.js';
 class KalmanFilter {
     constructor(F, H, Q, R, P_initial, X_initial)
     {
@@ -15,7 +14,6 @@ class KalmanFilter {
         var {
             add, sub, mult, inv, identity, transpose,
         } = mat;
-        //TODO cache variables like the transpose of H
 
         // prediction: X = F * X  |  P = F * P * F' + Q
         var X_p = mult(this.F, this.X); //Update state vector
@@ -34,7 +32,6 @@ class KalmanFilter {
             y[i] = [y[i]];
         }
 
-        //Now we correct the internal values of the model
         // correction: X = X + K * (m - H * X)  |  P = (I - K * H) * P
         this.X = add(X_p, mult(K, y));
         this.P = mult(sub(identity(K.length), mult(K,this.H)), P_p);
@@ -103,6 +100,34 @@ class EyeTracker {
         document.addEventListener('click', async (event) => {
             await eyetracker.handleClick(event);
         });
+    }
+
+    async end(){
+        console.log("Eye tracking ended");
+
+        // 비디오 스트림 중지
+        if (this.videoElement && this.videoElement.srcObject) {
+            let stream = this.videoElement.srcObject;
+            let tracks = stream.getTracks();
+
+            tracks.forEach(track => track.stop()); // 모든 트랙 중지
+            this.videoElement.srcObject = null; // 비디오 스트림 연결 해제
+
+            // 비디오 요소 제거
+            if (this.videoElement.parentNode) {
+                this.videoElement.parentNode.removeChild(this.videoElement);
+            }
+
+            console.log("Webcam stream stopped and video element removed.");
+        }
+
+        // 모델 제거 (모델 메모리 해제는 불가하지만 참조 제거)
+        this.detector = null;
+        console.log("Model reference cleared.");
+
+        // 클릭 이벤트 리스너 제거
+        document.removeEventListener('click', this.handleClick);
+        console.log("Click event listener removed.");
     }
 
     // 웹캠을 설정하는 메서드
@@ -392,8 +417,6 @@ class EyeTracker {
             predictedX = Math.floor(predictedX);
             predictedY = Math.floor(predictedY);
 
-
-            // const kalman = new KalmanFilter(F, H, Q, R, P_initial, x_initial);
             if(this.kalman){
                 var newGaze = [predictedX, predictedY];
                 newGaze = this.kalman.update(newGaze);

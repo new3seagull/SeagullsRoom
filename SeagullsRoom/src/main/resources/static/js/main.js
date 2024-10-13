@@ -37,8 +37,8 @@ function startTimer() {
 
     Notification.requestPermission();
     document.getElementById('startButton').style.display = 'none';
-    document.getElementById('pauseButton').style.display = 'inline-block';
-    document.getElementById('pauseButton').innerText = '일시정지';
+    // document.getElementById('pauseButton').style.display = 'inline-block';
+    // document.getElementById('pauseButton').innerText = '일시정지';
     document.getElementById('stopButton').style.display = 'inline-block';
     isPaused = false;
 }
@@ -46,23 +46,27 @@ function startTimer() {
 function pauseTimer() {
     clearInterval(timerInterval);
     pausedTime = Date.now() - startTime;
-    document.getElementById('pauseButton').innerText = '재시작';
+    // document.getElementById('pauseButton').innerText = '재시작';
     isPaused = true;
 }
 
 function controlTimer(data) {
     const stopCategories = ["GAME", "SNS", "OTHER"];
-    if (stopCategories.includes(data) && !isPaused) {
-        console.log('stop');
-        pauseTimer();
 
-        var img = "/images/logo.png";
-        var text = '공부에 집중하세요. 타이머가 정지됩니다.';
+    if (stopCategories.includes(data)) {
+        if (!isPaused) {
+            pauseTimer();
+            var img = "/images/logo.png";
+            var text = data + '공부에 집중하세요. 타이머가 정지됩니다.';
+            var notification = new Notification("SeagullsRoom", { body: text, icon: img });
+            setTimeout(notification.close.bind(notification), 4000);
+        }
+    } else if (isPaused) {
+        startTimer();
+        var img = "/image/images.jpg";
+        var text = data + ' 타이머가 재시작됩니다.';
         var notification = new Notification("SeagullsRoom", { body: text, icon: img });
         setTimeout(notification.close.bind(notification), 4000);
-    } else if (data === "STUDY" && isPaused) {
-        console.log('start');
-        startTimer();
     }
 }
 
@@ -107,6 +111,9 @@ function appendMessage(sender, message, imageFile = null, isSent = false) {
 }
 
 document.getElementById('startButton').addEventListener('click', async function () {
+    document.getElementById('timer').innerText = '00:00:00';
+    pausedTime = 0;
+
     const categories = JSON.parse(localStorage.getItem('categories')) || [];
 
     if (categories.length < 3) {
@@ -139,6 +146,7 @@ document.getElementById('startButton').addEventListener('click', async function 
 
 
             } else {
+                controlTimer("None");
                 console.log('Gaze coordinates not available.');
             }
         }).catch(error => {
@@ -223,13 +231,13 @@ function updateCategoryCount(category) {
     console.log(`${category} count: ${screenTimeData[category]}`);
 }
 
-document.getElementById('pauseButton').addEventListener('click', function() {
-    if (isPaused) {
-        startTimer();
-    } else {
-        pauseTimer();
-    }
-});
+// document.getElementById('pauseButton').addEventListener('click', function() {
+//     if (isPaused) {
+//         startTimer();
+//     } else {
+//         pauseTimer();
+//     }
+// });
 
 document.getElementById('stopButton').addEventListener('click', function () {
     clearInterval(timerInterval);
@@ -237,6 +245,7 @@ document.getElementById('stopButton').addEventListener('click', function () {
     clearInterval(gazeDrawer);
     ctx_plot.clearRect(0, 0, canvas_plot.width, canvas_plot.height); // 이전 원 지우기
 
+    eyetracker.end();
     // webgazer.end();
     mediaStream.getTracks().forEach(track => track.stop());
 
@@ -290,10 +299,6 @@ document.getElementById('stopButton').addEventListener('click', function () {
     .catch(error => {
         console.error('Error sending some screen time data:', error);
     });
-
-    document.getElementById('timer').innerText = '00:00:00';
-    pausedTime = 0;
-    isPaused = false;
 
     document.getElementById('startButton').style.display = 'inline-block';
     // document.getElementById('pauseButton').style.display = 'none';

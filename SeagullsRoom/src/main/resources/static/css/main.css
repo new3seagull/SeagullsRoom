@@ -125,13 +125,12 @@ button:active {
     justify-content: flex-start;
 }
 
-
 canvas {
-    position: absolute;  /* 절대 위치 지정 */
+    position: absolute;
     top: 0;
     left: 0;
-    width: 100vw;        /* 화면 전체 너비 */
-    height: 100vh;       /* 화면 전체 높이 */
-    z-index: 9999;       /* 최상단으로 설정 */
-    pointer-events: none; /* 클릭 이벤트 무시 */
+    width: 100vw;
+    height: 100vh;
+    z-index: 9999;
+    pointer-events: none;
 }
