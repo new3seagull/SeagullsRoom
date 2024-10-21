@@ -36,7 +36,7 @@ document.getElementById('imageForm').addEventListener('submit', async function(e
             formData.append('image', imageFile);
             const jwtToken = localStorage.getItem('jwtToken');
 
-            fetch('http://localhost:8080/api/v1/gpt/chat', {
+            fetch('http://54.180.154.212:8080/api/v1/gpt/chat', {
                 method: 'POST',
                 headers: {
                     'Authorization': `${jwtToken}`

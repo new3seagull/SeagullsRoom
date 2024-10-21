@@ -198,7 +198,7 @@ document.getElementById('startButton').addEventListener('click', async function 
                 formData.append('userCategories', JSON.stringify(categories));
                 const jwtToken = localStorage.getItem('jwtToken');
                 appendMessage('클라이언트', "주어진 이미지가 어떤 카테고리에 해당하는지 반환", imageFile, true);
-                fetch('http://localhost:8080/api/v1/gpt/chat', {
+                fetch('http://54.180.154.212:8080/api/v1/gpt/chat', {
                     method: 'POST',
                     headers: {
                         'Authorization': `${jwtToken}`
@@ -250,7 +250,7 @@ document.getElementById('stopButton').addEventListener('click', function () {
     mediaStream.getTracks().forEach(track => track.stop());
 
     // 공부 시간 전송
-    fetch('http://localhost:8080/api/v1/studies', {
+    fetch('http://54.180.154.212:8080/api/v1/studies', {
         method: 'POST',
         headers: {
             'Authorization': localStorage.getItem('jwtToken'),
@@ -268,7 +268,7 @@ document.getElementById('stopButton').addEventListener('click', function () {
     const screenTimeData = JSON.parse(localStorage.getItem('screenTimeData') || '{}');
 
     const promises = Object.entries(screenTimeData).map(([category, count]) => {
-        return fetch('http://localhost:8080/api/v1/screenTime', {
+        return fetch('http://54.180.154.212:8080/api/v1/screenTime', {
             method: 'POST',
             headers: {
                 'Authorization': localStorage.getItem('jwtToken'),

@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
 function fetchScreenTimeData() {
     const jwtToken = localStorage.getItem('jwtToken');
 
-    fetch('http://localhost:8080/api/v1/screenTime', {
+    fetch('http://54.180.154.212:8080/api/v1/screenTime', {
         method: 'GET',
         headers: {
             'Authorization': `${jwtToken}`,

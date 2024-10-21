@@ -11,7 +11,7 @@ window.onload = function() {
         return `${hours}시간 ${minutes}분 ${seconds}초`;
     }
 
-    fetch('http://localhost:8080/api/v1/friend/count', {
+    fetch('http://54.180.154.212:8080/api/v1/friend/count', {
         method: 'GET',
         headers: {
             'Authorization': localStorage.getItem('jwtToken'),
@@ -32,7 +32,7 @@ window.onload = function() {
             console.error('There was a problem with the fetch operation:', error);
         });
 
-    fetch('http://localhost:8080/api/v1/studies/user/month', {
+    fetch('http://54.180.154.212:8080/api/v1/studies/user/month', {
         method: 'GET',
         headers: {
             'Authorization': localStorage.getItem('jwtToken'),
@@ -66,7 +66,7 @@ window.onload = function() {
         });
 
 
-    fetch('http://localhost:8080/api/v1/studies/user/date', {
+    fetch('http://54.180.154.212:8080/api/v1/studies/user/date', {
         method: 'GET',
         headers: {
             'Authorization': localStorage.getItem('jwtToken'),

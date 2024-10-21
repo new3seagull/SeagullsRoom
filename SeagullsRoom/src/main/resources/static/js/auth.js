@@ -8,7 +8,7 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
 
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
-    fetch('http://localhost:8080/api/v1/login', {
+    fetch('http://54.180.154.212:8080/api/v1/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -44,7 +44,7 @@ document.getElementById('signupForm').addEventListener('submit', function(event)
     const email = email_input.value;
     const password = password_input.value;
 
-    fetch('http://localhost:8080/api/v1/users', {
+    fetch('http://54.180.154.212:8080/api/v1/users', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
