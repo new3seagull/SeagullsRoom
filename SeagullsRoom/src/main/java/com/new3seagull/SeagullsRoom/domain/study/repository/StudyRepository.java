@@ -33,16 +33,31 @@ public interface StudyRepository extends JpaRepository<Study, Long> {
     @Query("SELECT s.studyTime FROM Study s WHERE s.user = :user AND FUNCTION('YEAR', s.studyDate) = :year AND FUNCTION('MONTH', s.studyDate) = :month AND FUNCTION('DAY', s.studyDate) = :day")
     List<LocalTime> findTotalStudyTimeByUserIdAndDate(@Param("user") User user, @Param("year") int year, @Param("month") int month, @Param("day") int day);
 
-    @Query("SELECT s.user, " +
-            "SUM(HOUR(s.studyTime) * 60 + MINUTE(s.studyTime)) AS totalStudyTimeInMinutes " +
+    @Query(value = "SELECT s.user_id, " +
+            "SUM(EXTRACT(HOUR FROM s.study_time) * 3600 + EXTRACT(MINUTE FROM s.study_time) * 60 + EXTRACT(SECOND FROM s.study_time)) AS totalStudyTimeInSeconds " +
             "FROM Study s " +
-            "WHERE FUNCTION('YEAR', s.studyDate) = :year " +
-            "AND FUNCTION('MONTH', s.studyDate) = :month " +
-            "AND FUNCTION('DAY', s.studyDate) = :day " +
-            "GROUP BY s.user " +
-            "ORDER BY totalStudyTimeInMinutes DESC")
-    Page<Object[]> findStudyTimeRankingByDate(@Param("year") int year,
-                                              @Param("month") int month,
-                                              @Param("day") int day,
-                                              Pageable pageable);
+            "WHERE EXTRACT(YEAR FROM s.study_date) = :year " +
+            "AND EXTRACT(MONTH FROM s.study_date) = :month " +
+            "AND EXTRACT(DAY FROM s.study_date) = :day " +
+            "GROUP BY s.user_id " +
+            "ORDER BY totalStudyTimeInSeconds DESC " +
+            "LIMIT :pageSize OFFSET :offset",
+            nativeQuery = true)
+    List<Object[]> findStudyTimeRankingByDateInSeconds(@Param("year") int year,
+                                                       @Param("month") int month,
+                                                       @Param("day") int day,
+                                                       @Param("pageSize") int pageSize,
+                                                       @Param("offset") int offset);
+
+
+    @Query(value = "SELECT s.user_id, " +
+            "SUM(EXTRACT(HOUR FROM s.study_time) * 3600 + EXTRACT(MINUTE FROM s.study_time) * 60 + EXTRACT(SECOND FROM s.study_time)) AS totalStudyTimeInSeconds " +
+            "FROM Study s " +
+            "WHERE EXTRACT(YEAR FROM s.study_date) = :year " +
+            "AND EXTRACT(MONTH FROM s.study_date) = :month " +
+            "AND EXTRACT(DAY FROM s.study_date) = :day " +
+            "GROUP BY s.user_id " +
+            "ORDER BY totalStudyTimeInSeconds DESC " +
+            "LIMIT 10", nativeQuery = true)
+    List<Object[]> findTop10StudyTimeByDate(@Param("year") int year, @Param("month") int month, @Param("day") int day);
 }

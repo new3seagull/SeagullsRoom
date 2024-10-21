@@ -9,11 +9,14 @@ import com.new3seagull.SeagullsRoom.domain.user.entity.User;
 import com.new3seagull.SeagullsRoom.global.error.CustomException;
 import com.new3seagull.SeagullsRoom.domain.user.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
+
+import java.math.BigDecimal;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -61,25 +64,32 @@ public class StudyService {
 
     public List<StudyResponseDto> getTop10StudyTimes(LocalDate date) {
         Pageable pageable = PageRequest.of(0, 10);
-        List<Object[]> top10 = studyRepository.findStudyTimeRankingByDate(
-                date.getYear(), date.getMonthValue(), date.getDayOfMonth(), pageable).getContent();
-
+        List<Object[]> top10 = studyRepository.findStudyTimeRankingByDateInSeconds(
+                date.getYear(), date.getMonthValue(), date.getDayOfMonth(), 10, 0);
+        System.out.println(top10);
         return top10.stream()
                 .map(row -> {
-                    User user = (User) row[0];
-                    int totalStudyTimeInMinutes = ((Long) row[1]).intValue(); // 총 공부 시간을 분 단위로 받아옴
-
+                    Optional<User> user = userRepository.findById((Long) row[0]);
                     // 분 단위 시간을 LocalTime으로 변환
-                    LocalTime studyTime = convertSecondsToLocalTime(totalStudyTimeInMinutes);
+                    // 초 단위 시간을 LocalTime으로 변환
+                    Long totalStudyTimeInSeconds = ((BigDecimal) row[1]).longValue();
+                    int hours = (int) (totalStudyTimeInSeconds / 3600);           // 초 단위를 시간으로 변환
+                    int minutes = (int) ((totalStudyTimeInSeconds % 3600) / 60);  // 남은 초에서 분으로 변환
+                    int seconds = (int) (totalStudyTimeInSeconds % 60);           // 나머지 초
 
+// LocalTime 객체 생성 (시간, 분, 초)
+                    LocalTime studyTime = LocalTime.of(hours, minutes, seconds);
+
+                    System.out.println("Study Time: " + studyTime);
                     // 현재 시간을 updatedAt으로 설정
                     LocalDateTime updatedAt = LocalDateTime.now();
 
                     // StudyResponseDto 객체 생성 및 반환
                     return StudyResponseDto.builder()
-                            .userEmail(user.getEmail())
+                            .userEmail(user.get().getEmail())
                             .studyTime(studyTime)
                             .updatedAt(updatedAt)
+                            .name(user.get().getName())
                             .build();
                 })
                 .collect(Collectors.toList());

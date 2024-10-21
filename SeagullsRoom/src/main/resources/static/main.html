@@ -1,85 +1,127 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="css/main.css"/>
-  <link rel="stylesheet" href="css/sidebar.css">
-  <link rel="stylesheet" type="text/css"
-        href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css"
-        rel="stylesheet">
-  <title>Main Page</title>
-  <script src="js/webgazer.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/main.css"/>
+    <link rel="stylesheet" href="css/sidebar.css">
+    <link rel="stylesheet" type="text/css"
+          href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css"
+          rel="stylesheet">
+    <title>Main Page</title>
+    <script src="js/webgazer.js"></script>
 </head>
 <body>
+<canvas id="plotting_canvas"></canvas>
 <canvas id="canvas" width="700" height="500" style="display: none"></canvas>
 <video id="screenVideo" autoplay style="display:none;"></video>
-<!--<a href = "http://localhost:8080/gpt.html">gpt</a>-->
 
 <nav class="main-menu">
-  <li>
-    <a href="http://startific.com">
-      <i class="fa fa-home fa-lg"></i>
-      <span class="nav-text">Home</span>
-    </a>
-  </li>
-
-  <li>
-    <a href="auth.html">
-      <i class="fa fa-user fa-lg"></i>
-      <span class="nav-text">Login</span>
-    </a>
-  </li>
-  <li>
-    <a href="mypage.html">
-      <i class="fa fa-envelope-o fa-lg"></i>
-      <span class="nav-text">My Page</span>
-    </a>
-  </li>
-  <div id="todoHeader">
-    <h3>TODO</h3>
-    <button id="addTodoButton">+</button>
-  </div>
-  <ul id="todoList">
-  </ul>
+    <li>
+        <a href="main.html">
+            <i class="fa fa-home fa-lg"></i>
+            <span class="nav-text">Home</span>
+        </a>
+    </li>
+    <li>
+        <a href="auth.html">
+            <i class="fa fa-user fa-lg"></i>
+            <span class="nav-text">Login</span>
+        </a>
+    </li>
+    <li>
+        <a href="mypage.html">
+            <i class="fa fa-envelope-o fa-lg"></i>
+            <span class="nav-text">My Page</span>
+        </a>
+    </li>
+    <li>
+        <a href="rank.html">
+            <i class="fa fa-trophy fa-lg"></i>
+            <span class="nav-text">Rank</span>
+        </a>
+    </li>
+    <li>
+        <a href="screentime.html">
+            <i class="fa fa-clock-o fa-lg"></i>
+            <span class="nav-text">Screen Time</span>
+        </a>
+    </li>
+    <div id="todoHeader">
+        <h3>TODO</h3>
+        <button id="addTodoButton">+</button>
+    </div>
+    <ul id="todoList">
+    </ul>
+    <div id="categoryHeader">
+        <h3>스크린타임</h3>
+        <button id="addCategoryButton">+</button>
+    </div>
+    <ul id="categoryList">
+    </ul>
 </nav>
 
-<!-- Todo Modal -->
+<!-- 할일 모달 -->
 <div id="todoModal" class="modal">
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <h2>새 TODO 추가</h2>
-    <form id="todoForm">
-      <label for="todoTitle">제목:</label>
-      <input type="text" id="todoTitle" required>
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>새 TODO 추가</h2>
+        <form id="todoForm">
+            <label for="todoTitle">제목:</label>
+            <input type="text" id="todoTitle" required>
 
-      <label for="todoDescription">설명:</label>
-      <textarea id="todoDescription"></textarea>
+            <label for="todoDescription">설명:</label>
+            <textarea id="todoDescription"></textarea>
 
-      <label for="todoCompleted">완료 여부:</label>
-      <input type="checkbox" id="todoCompleted">
+            <label for="todoCompleted">완료 여부:</label>
+            <input type="checkbox" id="todoCompleted">
 
-      <button type="submit">추가</button>
-    </form>
-  </div>
+            <button type="submit">추가</button>
+        </form>
+    </div>
+</div>
+
+<!-- 카테고리 모달 -->
+<div id="categoryModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>새 카테고리 추가</h2>
+        <form id="categoryForm">
+            <label for="categoryName">카테고리 이름:</label>
+            <input type="text" id="categoryName" required>
+
+            <button type="submit">추가</button>
+        </form>
+    </div>
 </div>
 
 <div id="container">
-  <div class="clock">
-    <div id="timer">00:00:00</div>
-  </div>
-  <br>
-  <button id="startButton">공부시작</button>
-  <button id="pauseButton" style="display:none;">일시정지</button>
-  <button id="stopButton" style="display:none;">종료</button>
-  <button id="calibrationButton">calibration</button>
+    <div class="clock">
+        <div id="timer">00:00:00</div>
+    </div>
+    <br>
+    <button id="startButton">공부시작</button>
+<!--    <button id="pauseButton" style="display:none;">일시정지</button>-->
+    <button id="stopButton" style="display:none;">종료</button>
+    <button id="calibrationButton">calibration</button>
 
-  <div id="chatContainer">
-    <div id="chatMessages" style="margin-bottom: 10px;"></div>
-  </div>
+    <div id="chatContainer">
+        <div id="chatMessages" style="margin-bottom: 10px;"></div>
+    </div>
 </div>
 
-  <script src="/js/main.js" crossorigin="anonymous"></script>
-  <script src="/js/todo.js"></script>
+<!-- Require the peer dependencies of face-landmarks-detection. -->
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core"></script>
+<!-- You must explicitly require a TF.js backend if you're not using the TF.js union bundle. -->
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/face-landmarks-detection"></script>
+
+
+<script src="/js/mat.js"></script>
+<script src="/js/eyetracker.js"></script>
+<script src="/js/main.js" crossorigin="anonymous"></script>
+<script src="/js/todo.js"></script>
+<script src="/js/category.js"></script>
 </body>
 </html>

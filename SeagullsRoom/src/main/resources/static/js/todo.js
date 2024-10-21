@@ -23,7 +23,7 @@ function getHeaders() {
 function fetchTodos() {
     console.log('Fetching todos...');
     const headers = getHeaders();
-    return fetch('/api/v1/todo', {
+    return fetch('http://54.180.154.212:8080/api/v1/todo', {
         method: 'GET',
         headers: headers
     })
@@ -72,7 +72,7 @@ function updateTodo(id, completed) {
         completed: completed
     };
 
-    return fetch(`/api/v1/todo/${id}`, {
+    return fetch(`http://54.180.154.212:8080/api/v1/todo/${id}`, {
         method: 'PUT',
         headers: headers,
         body: JSON.stringify(updatedTodo)
@@ -100,7 +100,7 @@ function addTodo(event) {
     const headers = getHeaders();
     const newTodo = { title, description, completed };
 
-    fetch('/api/v1/todo', {
+    fetch('http://54.180.154.212:8080/api/v1/todo', {
         method: 'POST',
         headers: headers,
         body: JSON.stringify(newTodo)
@@ -150,7 +150,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const token = localStorage.getItem('jwtToken');
     if (!token) {
         console.log('No token found on page load, redirecting to login');
-        window.location.href = '/login';
+        window.location.href = 'http://54.180.154.212:8080/login';
     } else {
         console.log('Token found, fetching todos');
         fetchTodos().catch(handleError);
