@@ -146,7 +146,7 @@ document.getElementById('startButton').addEventListener('click', async function 
 
 
             } else {
-                controlTimer("None");
+                controlTimer("OTHER");
                 console.log('Gaze coordinates not available.');
             }
         }).catch(error => {
