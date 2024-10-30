@@ -454,6 +454,14 @@ class EyeTracker {
         this.screenYArray = JSON.parse(localStorage.getItem('screenYArray')) || [];
     }
 
+    delState() {
+        localStorage.removeItem('coefficientsX');
+        localStorage.removeItem('coefficientsY');
+        localStorage.removeItem('eyeFeatsList');
+        localStorage.removeItem('screenXArray');
+        localStorage.removeItem('screenYArray');
+    }
+
 }
 
 // EyeTracker 클래스의 인스턴스를 생성하여 외부에서 사용할 수 있도록 합니다.

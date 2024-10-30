@@ -306,6 +306,12 @@ document.getElementById('stopButton').addEventListener('click', function () {
 });
 
 document.getElementById('calibrationButton').addEventListener('click', function() {
+    localStorage.removeItem('coefficientsX');
+    localStorage.removeItem('coefficientsY');
+    localStorage.removeItem('eyeFeatsList');
+    localStorage.removeItem('screenXArray');
+    localStorage.removeItem('screenYArray');
+
     location.href = '../calibration.html';
 });
 
