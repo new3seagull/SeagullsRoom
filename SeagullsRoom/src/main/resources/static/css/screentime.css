@@ -1,61 +1,120 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
 #container {
+  margin-left: 60px;
   padding: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden; /* 가로 스크롤 제거 */
+  box-sizing: border-box;
+  background-color: #f8f9fa;
+  width: calc(100% - 60px); /* 사이드바 제외한 너비 */
+}
+
+h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #000;
+  margin-bottom: 24px;
+  text-align: center;
 }
 
 #screenTimeData {
   width: 100%;
-  max-width: 600px;
-  margin-bottom: 20px;
+  max-width: 800px; /* 최대 너비 증가 */
+  margin: 0 auto 20px;
 }
 
 #screenTimeData ul {
   list-style-type: none;
   padding: 0;
-  columns: 2;
-  -webkit-columns: 2;
-  -moz-columns: 2;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2열 고정 */
+  gap: 16px;
+  margin: 0;
 }
 
 #screenTimeData li {
-  margin-bottom: 10px;
-  break-inside: avoid-column;
+  padding: 16px;
+  font-size: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  border-radius: 8px;
 }
 
 .chart-container {
-  width: 400px;
-  height: 400px;
+  width: 100%;
+  max-width: 400px;
+  aspect-ratio: 1;
   position: relative;
   margin: 20px auto;
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 .legend {
   width: 100%;
   max-width: 800px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin: 20px auto;
+  padding: 16px;
+  background-color: white;
+  border-radius: 8px;
 }
 
 .legend-item {
   display: flex;
   align-items: center;
-  margin: 5px 10px;
-  width: calc(25% - 20px);  /* 4개씩 한 줄에 표시 */
+  padding: 8px;
+  font-weight: 700;
+  color: #000;
+  font-size: 16px;
 }
 
 .color-box {
-  width: 20px;
-  height: 20px;
-  margin-right: 5px;
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  border-radius: 4px;
   flex-shrink: 0;
 }
 
 @media (max-width: 768px) {
+  #container {
+    padding: 16px;
+  }
+
+  h1 {
+    font-size: 24px;
+  }
+
+  #screenTimeData ul {
+    grid-template-columns: 1fr; /* 모바일에서는 1열로 */
+  }
+
+  .legend {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    padding: 12px;
+  }
+
   .legend-item {
-    width: calc(50% - 20px);  /* 모바일에서는 2개씩 한 줄에 표시 */
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .chart-container {
+    padding: 12px;
   }
 }

@@ -18,7 +18,8 @@ function fetchScreenTimeData() {
     })
     .catch(error => {
         console.error('Error fetching screen time data:', error);
-        document.getElementById('screenTimeData').innerHTML = '<p>Error loading screen time data. Please try again later.</p>';
+        document.getElementById('screenTimeData').innerHTML =
+            '<p class="error-message">Error loading screen time data. Please try again later.</p>';
     });
 }
 
@@ -26,14 +27,12 @@ function displayScreenTimeData(data) {
     const screenTimeDataElement = document.getElementById('screenTimeData');
 
     if (data.length === 0) {
-        screenTimeDataElement.innerHTML = '<p>No screen time data available.</p>';
+        screenTimeDataElement.innerHTML = '<p class="no-data-message">No screen time data available.</p>';
         return;
     }
 
-    // 총 시간을 계산
     const totalTime = data.reduce((sum, item) => sum + item.count, 0);
 
-    // 백분율 계산
     let sortedData = data.map(item => ({
         category: item.category,
         count: item.count,
@@ -42,22 +41,33 @@ function displayScreenTimeData(data) {
 
     let html = '<ul>';
     sortedData.forEach(item => {
-        // 추후 시간 표시 기능 추가
-        // html += `<li>${item.category}: ${item.percentage.toFixed(2)}% (${item.count} minutes)</li>`;
-        html += `<li>${item.category}: ${item.percentage.toFixed(2)}%</li>`;
+        // 시간과 분으로 변환
+        const hours = Math.floor(item.count / 60);
+        const minutes = item.count % 60;
+        const timeString = hours > 0 ?
+            `${hours}h ${minutes}m` :
+            `${minutes}m`;
+
+        html += `
+            <li>
+                <span style="color: #000; font-weight: 700">${item.category}</span>
+                <span style="color: #000; font-weight: 700">${item.percentage.toFixed(1)}% (${timeString})</span>
+            </li>`;
     });
     html += '</ul>';
 
     screenTimeDataElement.innerHTML = html;
-
     createDonutChart(sortedData);
 }
 
-const colors = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#FF9999', '#66CCCC', '#FFCC99', '#99CC99'];
+const colors = [
+    '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0',
+    '#9966FF', '#FF9F40', '#FF9999', '#66CCCC'
+];
 
 function createDonutChart(data) {
     const svg = document.querySelector('svg');
-    svg.innerHTML = '<circle cx="21" cy="21" r="15.91549430918954" fill="#fff"></circle>'; // Reset SVG
+    svg.innerHTML = '<circle cx="21" cy="21" r="15.91549430918954" fill="#fff"></circle>';
 
     const totalTime = data.reduce((sum, item) => sum + item.count, 0);
     let cumulativePercentage = 0;
@@ -93,7 +103,7 @@ function createDonutChart(data) {
 
 function createLegend(data) {
     const legend = document.querySelector('.legend');
-    legend.innerHTML = ''; // Clear previous legend
+    legend.innerHTML = '';
 
     data.forEach((item, index) => {
         const legendItem = document.createElement('div');
@@ -104,7 +114,14 @@ function createLegend(data) {
         colorBox.style.backgroundColor = colors[index % colors.length];
 
         const text = document.createElement('span');
-        text.textContent = `${item.category}`;
+        // 시간 표시 추가
+        const hours = Math.floor(item.count / 60);
+        const minutes = item.count % 60;
+        const timeString = hours > 0 ?
+            `${hours}h ${minutes}m` :
+            `${minutes}m`;
+
+        text.textContent = `${item.category} (${timeString})`;
 
         legendItem.appendChild(colorBox);
         legendItem.appendChild(text);
