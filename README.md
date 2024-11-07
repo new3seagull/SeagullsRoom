@@ -1,131 +1,61 @@
-# SeagullsRoom
-    
-## Commit convention    
+### 1. 프로젝트 소개
+#### 1.1. 배경 및 필요성
+
+최근 공부에 집중해야 하는 학생들은 유튜브, 틱톡 등의 디지털 매체로 쉽게 산만해지며 공부에 집중하기 어려워하는 문제가 두드러지고 있다. 기존의 공부 타이머는 강제성 부족으로 인해 효과가 떨어지는 문제점이 존재한다. 예시로 2018년 11월 11일 (주) 팔로에서 출시된 “열정품은타이머”는 자신의 공부시간을 측정하고 이를 서로 공유함으로써 공부하고 있는 사람들을 보고 자극을 받아 공부할 수 있지만, 집계되는 시간동안 사용자가 실제로 공부에 집중하고 있는지 여부 판단은 실행하고 있지 않기 때문에 타이머를 켜놓고 자거나 놀며 공부시간을 말도 안 되게 늘린다는 단점이 존재한다. 이에 컴퓨터 비전 기술의 Eye tracking을 활용하여 사용자의 시선을 파악하고, 이를 통해 현재 공부에 집중하고 있는지를 판단하여 타이머를 진행함으로써 사용자의 효율적인 공부 집중을 유도하고 동기부여를 촉진할 수 있도록 돕기 위해 해당 프로젝트를 제안한다.
+
+
+#### 1.2. 목표 및 주요 내용
+
+본 연구의 목표는 웹캠을 활용한 실시간 시선 추적 기술(EyeTracker)을 개발하고, 이를 통해 사용자가 화면에서 주목하는 지점을 정확히 파악하는 것이다. 먼저, 시선 추적 시스템의 성능을 개선하여 사용자 시선의 움직임을 정밀하게 분석할 수 있도록 한다. 이어서, 시선 데이터를 활용해 사용자가 화면에서 보고 있는 콘텐츠가 학습과 관련된지 여부를 자동으로 판별하는 모델을 개발한다. 마지막으로, 이러한 기능을 통합한 웹 서비스를 구축하여 사용자들이 쉽게 접근하고 사용할 수 있도록 하며, 나아가 사용자 개개인의 학습 습관과 성취도를 분석하여 맞춤형 학습 피드백을 제공하는 시스템을 구현하는 것을 최종 목표로 한다.
+
+
+### 2. 상세설계
+#### 2.1. 시스템 구성도
+
+![Group 1630](https://github.com/user-attachments/assets/dbea93be-741a-49a8-9311-2d5e752333e0)
+
+
+#### 2.1. 사용 기술
+### 2.2. 사용 기술
+| 기술명  | 버전  | 설명 |
+|:-:|:-:|:-:|
+| Java  | 17  | 애플리케이션의 구현 언어 |
+| Docker | 27.0.3 | 배포 컨테이너 실행 |
+| Spring Boot | 3.3.1 | 주요 애플리케이션 프레임워크 버전 |
+| spring-data-jpa  | 3.3.1  |  Spring Data JPA를 위한 모듈.|
+| spring-security  |  3.3.1 | Spring Security를 위한 모듈  |
+|  JWT | 0.12.3  | 인증토큰 |
+| SpringDoc  | 2.1.0  | API 문서화 |
+| GPT API | 4o  | 사용자 화면 분류화  |
+
+
+
+### 3. 설치 및 사용 방법
 
 ```
-Type(File or function): Subject
-```
 
-|    Type    | 설명                                             |
-|:----------:|------------------------------------------------|
-|    feat    | 새로운 기능 추가                                      |
-|    fix     | 버그 수정                                          |
-|   style    | 코드 수정 없음 (세미콜론 누락, 코드 포맷팅, 파일, 폴더명 수정 혹은 이동 등) |
-|  refactor  | 코드 리팩토링                                        |
-|  comment   | 주석 추가 및 변경                                     |
-|    docs    | 문서 수정 (README.md 등)                            |
-|    test    | 테스트 코드 추가                                      |
-|   chore    | 빌드 업무 수정, 패키지 매니저 수정 (pom.xml 등)               |
-|   remove   | 파일 삭제                                          |
-
-
-# familing-backend
-
-    
-### commit은 최소한의 기능 단위로 해주세요!
-
-## Git Flow
-
-![image](https://github.com/Familing/familing-backend/assets/64734115/90aae5a5-1a90-4649-97a3-089f67a3cd37)
-
-### 저희 프로젝트는 master가 아니라 main 입니다.
-
-main 브랜치에 merge가 되면 자동으로 배포가 됩니다.
-
-### 기능 구현 시
-1. issue탭에서 기능 구현 이슈 등록 (구현할 기능, todo 작성)
-2. develop 브랜치로 이동해서 현재 develop 브랜치와 로컬 pull 해서 동기화 하기
-```
-git checkout develop
-git pull origin develop
-```
-3.  생성된 이슈 번호와 구현할 기능을 간단하게 축약한 브랜치 이름을 생성한다.
-ex) 이슈가 #2번이고 로그인 기능을 구현할 계획이라면  아래와 같은 브랜치 생성
+ git clone [주소](https://github.com/pnucse-capstone-2024/Capstone-2024-team-15.git)
+ intelij에 접속
+ .yml 파일 생성 및 gpt 토큰 입력
+ 프로그램 실행
 
 ```
-git checkout -b feature/2-login
-```
 
-기능 구현 후 develop 브랜치로 PR 생성 후 코드 리뷰 후 merge
+### 4. 소개 및 시연 영상
 
-참고 : https://velog.io/@myoungji-kim/git-flow
+컴퓨터 비전 기술의 Eye tracking과 생성형AI인 ChatGPT를 활용하여 사용자의 시선을 파악하고, 생성AI를 통해 공부와 관련이 있는지 판단 후 이를 통해 현재 공부에 집중하고 있는지를 판단하여 타이머를 진행함으로써 사용자의 효율적인 공부 집중을 유도하고 동기부여를 촉진할 수 있도록 돕기 위해 해당 프로젝트이다.
 
-## RestFul Api 
+https://www.youtube.com/watch?v=0P3rd11_0Y0
 
-1. 의미를 바로 알아볼 수 있도록 작성하고, 소문자를 사용한다.
-   ```text
-    ❌ GET /users/writing
-    ❌ GET /users/Post-Comments
-    ✅ GET /users/post-comments
-2. URI가 길어지는 경우 언더바(_) 대신 하이픈(-)을 사용한다.
-   ```text
-    ❌ GET /users/profile_image
-    ✅ GET /users/profile-image
-3. 마지막에 슬래시(/)를 포함하지 않는다.
-   ```text
-    ❌ GET /users/
-    ✅ GET /users
-4. 리소스에 대한 행위를 HTTP Method로 표현한다.
-    ```text
-   URI에 HTTP Method가 포함되어서는 안된다.   
-    ❌ get /users/
-    ✅ GET /users
- resource는 동사가 포함되어서는 안되고 명사를 사용한다.
-    ```text
-     ❌ GET /users/show/1
-     ✅ GET /users/1
-5. 파일 확장자는 URI에 포함시키지 않는다.
-    ```text
-    ❌ GET /users/photo.jpg
-    ✅ GET /users/photo (이때, payload의 포멧은 headers에 accept를 사용한다.)
-6. URI 사이에 연관 관계가 있는 경우 /리소스/고유ID/관계에 있는 리소스 순으로 작성한다.
-     ```text
-    ❌ GET /users/profile/{user_id}
-    ✅ GET /users/{user_id}/profile
-7. URI에 적성되는 영어의 복수형으로 작성한다.
-     ```text
-    ❌ GET /product
-    ✅ GET /products 
-8. URI는 /구분자를 사용하여 자원의 계층 관계를 나타내는데 사용한다.
-   
 
-![image](https://github.com/Familing/familing-backend/assets/64734115/af9cf33d-4ba4-43ed-8adb-2dce12e31160)
+### 5. 팀 소개
 
-참고 : https://velog.io/@tiger/API-RESTful-API
 
-## 패키지 구조
 
-예시
+## 구성원별 역할
 
-```
-com
- ㄴ new3seagull
-    ㄴ SeagullsRoom
-        ㄴ domain
-        |   ㄴ friend
-        |   | ㄴ controller
-        |   | ㄴ dto
-        |   | ㄴ entity
-        |   | ㄴ exception
-        |   | ㄴ repository
-        |   | ㄴ service
-        |   ㄴ user
-        |   | ㄴ controller
-        |   | ㄴ dto
-        |   | ㄴ entity
-        |   | ㄴ exception
-        |   | ㄴ repository
-        |   | ㄴ service
-        | ...
-        ㄴ global
-        |    ㄴ auth
-        |    ㄴ common
-        |    ㄴ config
-        |    ㄴ error
-        |    ㄴ infra
-        |    ㄴ util
-        ㄴ SeagullsRoomApllication
-```
-### 최상위 레벨에서는 domain과 global로 패키징한다.
-### domain 패키지에서는 도메인을 기준으로 하위 패키지를 구성한다.
-### global 패키지에서는 프로젝트 전방위적으로 사용할 수 있는 클래스들로 구성한다.
+| 학번       | 성명   | 역할 및 구현 기능                                                                                           | 이메일           |
+|------------|--------|-----------------------------------------------------------------------------------------------------------|------------------|
+| 201924480  | 박준형 | - JWT를 활용한 회원가입 및 로그인 기능 구현 <br> - GPT4-0 API 로직 구현 <br> - 공부시간 top10 조회 기능 구현 <br> - 팔로잉 기능 구현 <br> - 지피터 API 챗봇 형식 프론트 UI 구현 <br> - Docker, AWS를 활용한 배포 자동화 구현 | `sam1616@naver.com` |
+| 201924431  | 김상유 | - 로그인 페이지 구현 <br> - 공부 타이머 구현 <br> - 아이트래커 구현 <br> - 마이페이지 구현 <br> - 웹페이지 디자인 | `rlatkddb4356@naver.com` |
+| 201924530  | 이상준 | - study 도메인 구현 <br> - friend 도메인 구현 <br> - todo 도메인 구현 <br> - 알림 기능(Web API) 구현 <br> - Azure Database for MySQL 서버 배포 및 연동 <br> - 스크린타임 구현 <br> - API 명세서 작성 | `tkdwns2436@gmail.com` |
